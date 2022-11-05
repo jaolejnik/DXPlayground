@@ -1,8 +1,7 @@
 cbuffer ModelViewProjectionConstantBuffer : register(b0)
 {
     matrix model;
-    matrix view;
-    matrix projection;
+    matrix viewproj;
 };
 
 struct vsIn
@@ -25,8 +24,7 @@ vsOut main(vsIn input) // main is the default function name
 
     // Transform the position from object space to homogeneous projection space
     pos = mul(pos, model);
-    pos = mul(pos, view);
-    pos = mul(pos, projection);
+    pos = mul(pos, viewproj);
     Output.Position = pos;
 
     // Just pass through the color data

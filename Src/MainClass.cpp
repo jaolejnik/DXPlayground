@@ -79,15 +79,19 @@ HRESULT MainClass::Run(std::shared_ptr<DeviceResources> deviceResources,
         ShowWindow(m_hWnd, SW_SHOW);
 
     ID3D11Device *device = deviceResources->GetDevice();
-    ID3D11DeviceContext *deviceContext = deviceResources->GetDeviceContext();
+    ID3D11DeviceContext *context = deviceResources->GetDeviceContext();
+    ID3D11RenderTargetView *renderTarget = deviceResources->GetRenderTarget();
+    ID3D11DepthStencilView *depthStencil = deviceResources->GetDepthStencil();
 
-    GUI::Initialize(m_hWnd, device, deviceContext);
+    GUI::Initialize(m_hWnd, device, context);
 
     // The render loop is controlled here.
     bool bGotMsg;
     MSG msg;
     msg.message = WM_NULL;
     PeekMessage(&msg, NULL, 0U, 0U, PM_NOREMOVE);
+
+    float clearColor[4] = {0.0f, 0.0f, 0.f, 1.0f};
 
     while (WM_QUIT != msg.message)
     {
@@ -104,17 +108,27 @@ HRESULT MainClass::Run(std::shared_ptr<DeviceResources> deviceResources,
         else
         {
             GUI::StartFrame();
-            GUI::Window(renderer->m_clearColor);
+            GUI::Window(clearColor);
 
-            // deviceContext->OMSetRenderTargets(1, &renderTarget, depthStencil);
-            // deviceContext->ClearDepthStencilView(depthStencil,
-            //                                      D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
-            //                                      1.0f,
-            //                                      0);
-            // deviceContext->ClearRenderTargetView(renderTarget, DirectX::Colors::Black);
+            // Clear the render target and the z-buffer.
+            context->ClearRenderTargetView(
+                renderTarget,
+                clearColor);
+
+            context->ClearDepthStencilView(
+                depthStencil,
+                D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
+                1.0f,
+                0);
+
+            // Set the render target.
+            context->OMSetRenderTargets(
+                1,
+                &renderTarget,
+                depthStencil);
 
             // Update the scene.
-            renderer->Update();
+            renderer->Tick();
 
             // Render frames during idle time (when no messages are waiting).
             renderer->Render();

@@ -115,6 +115,7 @@
     <ClCompile Include="Src\GUI.cpp" />
     <ClCompile Include="Src\main.cpp" />
     <ClCompile Include="Src\MainClass.cpp" />
+    <ClCompile Include="Src\Model.cpp" />
     <ClCompile Include="Src\Renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -130,6 +131,7 @@
     <ClInclude Include="Src\DeviceResources.h" />
     <ClInclude Include="Src\GUI.h" />
     <ClInclude Include="Src\MainClass.h" />
+    <ClInclude Include="Src\Model.h" />
     <ClInclude Include="Src\Renderer.h" />
     <ClInclude Include="Src\ShaderStructs.h" />
   </ItemGroup>
