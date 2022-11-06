@@ -98,12 +98,17 @@ void Renderer::CreateDeviceDependentResources()
 {
     // Compile shaders using the Effects library.
     CreateShaders();
-    m_models.emplace_back(
-        new Model(
-            m_deviceResources,
-            m_pInputLayout,
-            m_pVertexShader,
-            m_pPixelShader));
+    for (UINT i = 0; i < 2; i++)
+    {
+        std::string name = "Cube" + std::to_string(i);
+        m_models.emplace_back(
+            new Model(
+                strdup(name.c_str()),
+                m_deviceResources,
+                m_pInputLayout,
+                m_pVertexShader,
+                m_pPixelShader));
+    }
 }
 
 void Renderer::CreateWindowSizeDependentResources()
@@ -123,7 +128,6 @@ void Renderer::Tick()
         m_frameCount = 0;
 }
 
-// Render the cube.
 void Renderer::Render()
 {
     for (Model *&model : m_models)

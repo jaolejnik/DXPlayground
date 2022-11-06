@@ -1,10 +1,12 @@
 #include "Model.h"
 
 Model::Model(
+    const char *name,
     std::shared_ptr<DeviceResources> deviceResources,
     Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout,
     Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader,
     Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader)
+    : m_name(name)
 {
     m_deviceResources = deviceResources;
     m_pInputLayout = inputLayout;

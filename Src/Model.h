@@ -7,7 +7,7 @@
 class Model
 {
 private:
-    std::string m_name;
+    const char *m_name;
     Transform m_transform;
     ConstantBufferStruct m_constantBufferData;
     std::vector<VertexPositionColor> m_vertices;
@@ -28,6 +28,7 @@ private:
 
 public:
     Model(
+        const char *name,
         std::shared_ptr<DeviceResources> deviceResources,
         Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout,
         Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader,
@@ -39,4 +40,7 @@ public:
     void Animate(UINT frameCount);
     void Update(UINT frameCount);
     void Render(DirectX::XMFLOAT4X4 viewproj);
+
+    const char *GetName() { return m_name; }
+    Transform &GetTransform() { return m_transform; }
 };

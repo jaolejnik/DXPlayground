@@ -110,6 +110,9 @@ HRESULT MainClass::Run(std::shared_ptr<DeviceResources> deviceResources,
             GUI::StartFrame();
             GUI::Window(clearColor);
 
+            for (Model *&model : renderer->GetModels())
+                GUI::ModelWindow(model);
+
             // Clear the render target and the z-buffer.
             context->ClearRenderTargetView(
                 renderTarget,

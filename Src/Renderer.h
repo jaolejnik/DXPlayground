@@ -26,4 +26,6 @@ public:
     void CreateWindowSizeDependentResources();
     void Tick();
     void Render();
+
+    std::vector<Model *> &GetModels() { return m_models; }
 };

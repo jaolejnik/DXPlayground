@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../pch.h"
+#include "Model.h"
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -11,6 +12,7 @@ namespace GUI
                     ID3D11DeviceContext *deviceContext);
     void StartFrame();
     void Window(float *clearColor);
+    void ModelWindow(Model *model);
     void Render();
     LRESULT ProcHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     void Cleanup();

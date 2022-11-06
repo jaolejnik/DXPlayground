@@ -55,19 +55,62 @@ void GUI::Window(float *clearColor)
 {
     static int counter = 0;
 
-    ImGui::Begin("Hello, world!"); // Create a window called "Hello, world!" and append into it.
-
-    ImGui::Text("This is some useful text."); // Display some text (you can use a format strings too)
-    // ImGui::Checkbox("Another Window", &show_another_window);
+    ImGui::Begin("General"); // Create a window called "Hello, world!" and append into it.
 
     ImGui::ColorEdit3("clear color", clearColor); // Edit 3 floats representing a color
 
-    if (ImGui::Button("Button")) // Buttons return true when clicked (most widgets return true when edited/activated)
-        counter++;
-    ImGui::SameLine();
-    ImGui::Text("counter = %d", counter);
+    ImGui::Separator();
 
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+    ImGui::End();
+}
+
+void GUI::ModelWindow(Model *model)
+{
+    Transform &tf = model->GetTransform();
+    DirectX::XMFLOAT3 angles = {
+        DirectX::XMConvertToDegrees(tf.m_rotation.x),
+        DirectX::XMConvertToDegrees(tf.m_rotation.y),
+        DirectX::XMConvertToDegrees(tf.m_rotation.z),
+    };
+
+    ImGui::Begin(model->GetName());
+
+    ImGui::Text("TRANSLATION");
+    ImGui::SliderFloat("T X", &(tf.m_translation.x), -10.0f, 10.0f);
+    ImGui::SliderFloat("T Y", &(tf.m_translation.y), -10.0f, 10.0f);
+    ImGui::SliderFloat("T Z", &(tf.m_translation.z), -10.0f, 10.0f);
+
+    ImGui::Separator();
+
+    ImGui::Text("ROTATION");
+    ImGui::SliderFloat("R X", &(angles.x), 0.0f, 360.0f);
+    ImGui::SliderFloat("R Y", &(angles.y), 0.0f, 360.0f);
+    ImGui::SliderFloat("R Z", &(angles.z), 0.0f, 360.0f);
+    tf.m_rotation = {
+        DirectX::XMConvertToRadians(angles.x),
+        DirectX::XMConvertToRadians(angles.y),
+        DirectX::XMConvertToRadians(angles.z),
+    };
+
+    ImGui::Separator();
+
+    ImGui::Text("SCALE");
+    ImGui::Checkbox("Uniform scale", &tf.m_useUniformScale);
+    if (tf.m_useUniformScale)
+    {
+        ImGui::SliderFloat("S U", &(tf.m_scale.x), 0.0f, 10.0f);
+        tf.m_scale.y = tf.m_scale.x;
+        tf.m_scale.z = tf.m_scale.x;
+    }
+    else
+    {
+        ImGui::SliderFloat("S X", &(tf.m_scale.x), 0.0f, 10.0f);
+        ImGui::SliderFloat("S Y", &(tf.m_scale.y), 0.0f, 10.0f);
+        ImGui::SliderFloat("S Z", &(tf.m_scale.z), 0.0f, 10.0f);
+    }
+
     ImGui::End();
 }
 
