@@ -117,6 +117,7 @@
     <ClCompile Include="Src\MainClass.cpp" />
     <ClCompile Include="Src\Model.cpp" />
     <ClCompile Include="Src\Renderer.cpp" />
+    <ClCompile Include="Src\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="external\dearimgui\imconfig.h" />
@@ -134,6 +135,7 @@
     <ClInclude Include="Src\Model.h" />
     <ClInclude Include="Src\Renderer.h" />
     <ClInclude Include="Src\ShaderStructs.h" />
+    <ClInclude Include="Src\Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Shaders\PixelShader.hlsl">

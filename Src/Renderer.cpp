@@ -90,7 +90,7 @@ void Renderer::CreateViewAndPerspective()
     DirectX::XMStoreFloat4x4(
         &m_constantBufferData.viewproj,
         DirectX::XMMatrixTranspose(
-            DirectX::XMMatrixMultiply(view, proj)));
+            view * proj));
 }
 
 // Create device-dependent resources for rendering.
@@ -98,12 +98,6 @@ void Renderer::CreateDeviceDependentResources()
 {
     // Compile shaders using the Effects library.
     CreateShaders();
-    m_models.emplace_back(
-        new Model(
-            m_deviceResources,
-            m_pInputLayout,
-            m_pVertexShader,
-            m_pPixelShader));
     m_models.emplace_back(
         new Model(
             m_deviceResources,

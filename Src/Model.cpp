@@ -12,7 +12,6 @@ Model::Model(
     m_pPixelShader = pixelShader;
     CreateCube();
     InitializeBuffers();
-    Update(0);
 }
 
 void Model::CreateCube()
@@ -142,21 +141,32 @@ HRESULT Model::InitializeBuffers()
     return hr;
 }
 
-void Model::Update(UINT frameCount)
+void Model::Animate(UINT frameCount)
 {
     // Rotate the cube 1 degree per frame.
-    DirectX::XMMATRIX cubeMatrix = DirectX::XMMatrixRotationY(
-        DirectX::XMConvertToRadians((float)frameCount));
 
-    // Translate the cube 0.01 unit per frame
-    // DirectX::XMMATRIX cubeMatrix = DirectX::XMMatrixTranslation(
-    //     ((float)m_frameCount++) / 100.f,
-    //     0.0f,
-    //     0.0f);
+    m_transform.SetTranslation(
+        {
+            ((float)frameCount) / 100.0f,
+            0.0f,
+            0.0f,
+        });
+
+    m_transform.SetRotation(
+        {
+            0.0f,
+            DirectX::XMConvertToRadians((float)frameCount),
+            0.0f,
+        });
+}
+
+void Model::Update(UINT frameCount)
+{
+    // Animate(frameCount);
 
     DirectX::XMStoreFloat4x4(
         &m_constantBufferData.model,
-        DirectX::XMMatrixTranspose(cubeMatrix));
+        DirectX::XMMatrixTranspose(m_transform.GetTransformMatrix()));
 }
 
 void Model::Render(DirectX::XMFLOAT4X4 viewproj)

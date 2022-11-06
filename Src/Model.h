@@ -2,18 +2,19 @@
 
 #include "DeviceResources.h"
 #include "ShaderStructs.h"
+#include "Transform.h"
 
 class Model
 {
 private:
     std::string m_name;
-    std::shared_ptr<DeviceResources> m_deviceResources;
+    Transform m_transform;
     ConstantBufferStruct m_constantBufferData;
     std::vector<VertexPositionColor> m_vertices;
     std::vector<unsigned short> m_indices;
 
-    // TODO cleanup needed?
     // Direct3D device resources
+    std::shared_ptr<DeviceResources> m_deviceResources;
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_pVertexBuffer;
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_pIndexBuffer;
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBuffer;
@@ -35,7 +36,7 @@ public:
     //       const std::string& filePath);
     ~Model() {}
 
-    // translate, rotate methods
+    void Animate(UINT frameCount);
     void Update(UINT frameCount);
     void Render(DirectX::XMFLOAT4X4 viewproj);
 };
