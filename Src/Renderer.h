@@ -24,6 +24,7 @@ public:
 
     void CreateDeviceDependentResources();
     void CreateWindowSizeDependentResources();
+    void SetupScene();
     void Tick();
     void Render();
 

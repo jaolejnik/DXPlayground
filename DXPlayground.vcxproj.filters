@@ -112,4 +112,7 @@
     <FxCompile Include="Shaders\PixelShader.hlsl" />
     <FxCompile Include="Shaders\VertexShader.hlsl" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Res\TestCube.arccmdl" />
+  </ItemGroup>
 </Project>

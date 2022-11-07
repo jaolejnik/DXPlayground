@@ -84,6 +84,7 @@ HRESULT MainClass::Run(std::shared_ptr<DeviceResources> deviceResources,
     ID3D11DepthStencilView *depthStencil = deviceResources->GetDepthStencil();
 
     GUI::Initialize(m_hWnd, device, context);
+    renderer->SetupScene();
 
     // The render loop is controlled here.
     bool bGotMsg;

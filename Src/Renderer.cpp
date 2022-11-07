@@ -49,6 +49,9 @@ HRESULT Renderer::CreateShaders()
             {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,
              0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 
+            {"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,
+             0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+
             {"COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT,
              0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
         };
@@ -98,22 +101,79 @@ void Renderer::CreateDeviceDependentResources()
 {
     // Compile shaders using the Effects library.
     CreateShaders();
-    for (UINT i = 0; i < 2; i++)
-    {
-        std::string name = "Cube" + std::to_string(i);
-        m_models.emplace_back(
-            new Model(
-                strdup(name.c_str()),
-                m_deviceResources,
-                m_pInputLayout,
-                m_pVertexShader,
-                m_pPixelShader));
-    }
 }
 
 void Renderer::CreateWindowSizeDependentResources()
 {
     CreateViewAndPerspective();
+}
+
+void Renderer::SetupScene()
+{
+
+    Model *plane = new Model(
+        "Plane",
+        "Res/Plane.arccmdl",
+        m_deviceResources,
+        m_pInputLayout,
+        m_pVertexShader,
+        m_pPixelShader);
+    Transform &tPlane = plane->GetTransform();
+    tPlane.SetTranslation({0.0f, -1.5f, 0.0f});
+
+    Model *cornellBox = new Model(
+        "CornellBox",
+        "Res/CornellBox.arccmdl",
+        m_deviceResources,
+        m_pInputLayout,
+        m_pVertexShader,
+        m_pPixelShader);
+
+    Transform &tCornellBox = cornellBox->GetTransform();
+    tCornellBox.SetTranslation({0.0f, 0.0f, -1.75f});
+    tCornellBox.SetRotation(
+        {
+            DirectX::XMConvertToRadians(94.0f),
+            DirectX::XMConvertToRadians(63.0f),
+            DirectX::XMConvertToRadians(37.0f),
+        });
+
+    Model *ball = new Model(
+        "Ball",
+        "Res/Ball.arccmdl",
+        m_deviceResources,
+        m_pInputLayout,
+        m_pVertexShader,
+        m_pPixelShader);
+    Transform &tBall = ball->GetTransform();
+    tBall.SetTranslation({0.2, -0.1f, 0.0f});
+    tBall.SetRotation(
+        {
+            DirectX::XMConvertToRadians(0.0f),
+            DirectX::XMConvertToRadians(120.0f),
+            DirectX::XMConvertToRadians(20.0f),
+        });
+
+    Model *monkey = new Model(
+        "Monkey",
+        "Res/Monkey.arccmdl",
+        m_deviceResources,
+        m_pInputLayout,
+        m_pVertexShader,
+        m_pPixelShader);
+    Transform &tMonkey = monkey->GetTransform();
+    tMonkey.SetTranslation({2.25, 0.0f, -3.0f});
+    tMonkey.SetRotation(
+        {
+            DirectX::XMConvertToRadians(10.0f),
+            DirectX::XMConvertToRadians(-30.0f),
+            DirectX::XMConvertToRadians(0.0f),
+        });
+
+    m_models.push_back(plane);
+    m_models.push_back(cornellBox);
+    m_models.push_back(ball);
+    m_models.push_back(monkey);
 }
 
 // Update the scene.

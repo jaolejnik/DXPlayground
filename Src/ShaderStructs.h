@@ -8,11 +8,9 @@ struct ConstantBufferStruct
     DirectX::XMFLOAT4X4 viewproj;
 };
 
-// Assert that the constant buffer remains 16-byte aligned.
-// static_assert((sizeof(ConstantBufferStruct) % 16) == 0, "Constant Buffer size must be 16-byte aligned");
-
-struct VertexPositionColor
+struct VertexPNC
 {
-    DirectX::XMFLOAT3 pos;
+    DirectX::XMFLOAT3 position;
+    DirectX::XMFLOAT3 normal;
     DirectX::XMFLOAT3 color;
 };

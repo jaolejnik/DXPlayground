@@ -1,7 +1,10 @@
+#include <fstream>
+
 #include "Model.h"
 
 Model::Model(
-    const char *name,
+    const std::string name,
+    const std::string &filePath,
     std::shared_ptr<DeviceResources> deviceResources,
     Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout,
     Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader,
@@ -12,93 +15,51 @@ Model::Model(
     m_pInputLayout = inputLayout;
     m_pVertexShader = vertexShader;
     m_pPixelShader = pixelShader;
-    CreateCube();
+    CreateFromFile(filePath);
     InitializeBuffers();
 }
 
-void Model::CreateCube()
+bool Model::CreateFromFile(const std::string &filePath)
 {
-    m_vertices =
-        {
-            {
-                DirectX::XMFLOAT3(-0.5f, -0.5f, -0.5f),
-                DirectX::XMFLOAT3(0, 0, 0),
-            },
-            {
-                DirectX::XMFLOAT3(-0.5f, -0.5f, 0.5f),
-                DirectX::XMFLOAT3(0, 0, 1),
-            },
-            {
-                DirectX::XMFLOAT3(-0.5f, 0.5f, -0.5f),
-                DirectX::XMFLOAT3(0, 1, 0),
-            },
-            {
-                DirectX::XMFLOAT3(-0.5f, 0.5f, 0.5f),
-                DirectX::XMFLOAT3(0, 1, 1),
-            },
+    int n;
+    std::ifstream modelFile(filePath);
 
-            {
-                DirectX::XMFLOAT3(0.5f, -0.5f, -0.5f),
-                DirectX::XMFLOAT3(1, 0, 0),
-            },
-            {
-                DirectX::XMFLOAT3(0.5f, -0.5f, 0.5f),
-                DirectX::XMFLOAT3(1, 0, 1),
-            },
-            {
-                DirectX::XMFLOAT3(0.5f, 0.5f, -0.5f),
-                DirectX::XMFLOAT3(1, 1, 0),
-            },
-            {
-                DirectX::XMFLOAT3(0.5f, 0.5f, 0.5f),
-                DirectX::XMFLOAT3(1, 1, 1),
-            },
-        };
+    if (!modelFile.is_open())
+        return false;
 
-    m_indices =
-        {
-            0,
-            2,
-            1, // -x
-            1,
-            2,
-            3,
+    modelFile >> n;
+    for (int i = 0; i < n; i += 9)
+    {
+        VertexPNC vpnc;
 
-            4,
-            5,
-            6, // +x
-            5,
-            7,
-            6,
+        modelFile >> vpnc.position.x;
+        modelFile >> vpnc.position.y;
+        modelFile >> vpnc.position.z;
 
-            0,
-            1,
-            5, // -y
-            0,
-            5,
-            4,
+        // TODO find out why normal and color memory are swapped
+        modelFile >> vpnc.color.x;
+        modelFile >> vpnc.color.y;
+        modelFile >> vpnc.color.z;
 
-            2,
-            6,
-            7, // +y
-            2,
-            7,
-            3,
+        modelFile >> vpnc.normal.x;
+        modelFile >> vpnc.normal.y;
+        modelFile >> vpnc.normal.z;
 
-            0,
-            4,
-            6, // -z
-            0,
-            6,
-            2,
+        m_vertices.push_back(vpnc);
+    }
 
-            1,
-            3,
-            7, // +z
-            1,
-            7,
-            5,
-        };
+    modelFile >> n;
+    for (int i = 0; i < n; i++)
+    {
+        uint16_t d;
+        modelFile >> d;
+
+        m_indices.push_back(d);
+    }
+
+    modelFile.close();
+
+    return true;
 }
 
 HRESULT Model::InitializeBuffers()
@@ -110,7 +71,7 @@ HRESULT Model::InitializeBuffers()
 
     // Create vertex buffer:
     CD3D11_BUFFER_DESC vDesc(
-        (UINT)(sizeof(VertexPositionColor) * m_vertices.size()),
+        static_cast<UINT>(sizeof(VertexPNC) * m_vertices.size()),
         D3D11_BIND_VERTEX_BUFFER);
 
     D3D11_SUBRESOURCE_DATA vData = {m_vertices.data()};
@@ -121,7 +82,7 @@ HRESULT Model::InitializeBuffers()
 
     // Create index buffer:
     CD3D11_BUFFER_DESC iDesc(
-        (UINT)(sizeof(unsigned short) * m_indices.size()),
+        static_cast<UINT>(sizeof(uint16_t) * m_indices.size()),
         D3D11_BIND_INDEX_BUFFER);
 
     D3D11_SUBRESOURCE_DATA iData = {m_indices.data()};
@@ -145,14 +106,6 @@ HRESULT Model::InitializeBuffers()
 
 void Model::Animate(UINT frameCount)
 {
-    // Rotate the cube 1 degree per frame.
-
-    m_transform.SetTranslation(
-        {
-            ((float)frameCount) / 100.0f,
-            0.0f,
-            0.0f,
-        });
 
     m_transform.SetRotation(
         {
@@ -203,7 +156,7 @@ void Model::Render(DirectX::XMFLOAT4X4 viewproj)
         0);
 
     // Set up the IA stage by setting the input topology and layout.
-    UINT stride = sizeof(VertexPositionColor);
+    UINT stride = sizeof(VertexPNC);
     UINT offset = 0;
 
     context->IASetVertexBuffers(
@@ -224,7 +177,7 @@ void Model::Render(DirectX::XMFLOAT4X4 viewproj)
 
     // Calling Draw tells Direct3D to start sending commands to the graphics device.
     context->DrawIndexed(
-        (UINT)(m_indices.size()),
+        static_cast<UINT>(m_indices.size()),
         0,
         0);
 }

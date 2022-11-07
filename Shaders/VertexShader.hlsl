@@ -7,13 +7,14 @@ cbuffer ModelViewProjectionConstantBuffer : register(b0)
 struct vsIn
 {
     float3 vPos   : POSITION;
-    float3 vColor : COLOR0;
+    float3 vNormal: NORMAL;
+    float3 vColor : COLOR;
 };
 
 struct vsOut 
 {
-    float4 Position : SV_POSITION;  // interpolated vertex position (system value)
-    float4 Color    : COLOR0;       // interpolated diffuse color
+    float4 Position : SV_POSITION;  
+    float4 Color    : COLOR;
 };
 
 vsOut main(vsIn input) // main is the default function name
