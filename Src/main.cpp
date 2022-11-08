@@ -1,6 +1,7 @@
 #include "DeviceResources.h"
 #include "Renderer.h"
 #include "MainClass.h"
+#include "ShaderManager.h"
 
 // Main function: Creates window, calls initialization functions, and hosts
 // the render loop.
@@ -22,14 +23,26 @@ INT WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 
     if (SUCCEEDED(hr))
     {
+        std::vector<ShaderType> shaders = {
+            Diffuse,
+            Normal,
+        };
+
         // Instantiate the device manager class.
-        std::shared_ptr<DeviceResources> deviceResources = std::shared_ptr<DeviceResources>(new DeviceResources());
-        // Create device resources.
+        std::shared_ptr<DeviceResources> deviceResources = std::shared_ptr<DeviceResources>(
+            new DeviceResources());
         deviceResources->CreateDeviceResources(winMain->GetWindowHandle());
 
+        std::shared_ptr<ShaderManager> shaderManager = std::shared_ptr<ShaderManager>(
+            new ShaderManager(
+                deviceResources,
+                shaders));
+
         // Instantiate the renderer.
-        std::shared_ptr<Renderer> renderer = std::shared_ptr<Renderer>(new Renderer(deviceResources));
-        renderer->CreateDeviceDependentResources();
+        std::shared_ptr<Renderer> renderer = std::shared_ptr<Renderer>(
+            new Renderer(
+                deviceResources,
+                shaderManager));
 
         // We have a window, so initialize window size-dependent resources.
         deviceResources->CreateWindowResources(winMain->GetWindowHandle());

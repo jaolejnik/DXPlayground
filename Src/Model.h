@@ -18,9 +18,6 @@ private:
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_pVertexBuffer;
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_pIndexBuffer;
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBuffer;
-    Microsoft::WRL::ComPtr<ID3D11InputLayout> m_pInputLayout;
-    Microsoft::WRL::ComPtr<ID3D11VertexShader> m_pVertexShader;
-    Microsoft::WRL::ComPtr<ID3D11PixelShader> m_pPixelShader;
 
     bool CreateFromFile(const std::string &filePath);
     HRESULT InitializeBuffers();
@@ -29,15 +26,14 @@ public:
     Model(
         const std::string name,
         const std::string &filePath,
-        std::shared_ptr<DeviceResources> deviceResources,
-        Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout,
-        Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader,
-        Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader);
+        std::shared_ptr<DeviceResources> deviceResources);
     ~Model() {}
 
     void Animate(UINT frameCount);
     void Update(UINT frameCount);
-    void Render(DirectX::XMFLOAT4X4 viewproj);
+    void Render(
+        DirectX::XMFLOAT4X4 viewproj,
+        ShaderStruct *shader);
 
     const char *GetName() { return m_name.c_str(); }
     Transform &GetTransform() { return m_transform; }

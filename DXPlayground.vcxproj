@@ -117,6 +117,7 @@
     <ClCompile Include="Src\MainClass.cpp" />
     <ClCompile Include="Src\Model.cpp" />
     <ClCompile Include="Src\Renderer.cpp" />
+    <ClCompile Include="Src\ShaderManager.cpp" />
     <ClCompile Include="Src\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -134,16 +135,24 @@
     <ClInclude Include="Src\MainClass.h" />
     <ClInclude Include="Src\Model.h" />
     <ClInclude Include="Src\Renderer.h" />
+    <ClInclude Include="Src\ShaderManager.h" />
     <ClInclude Include="Src\ShaderStructs.h" />
     <ClInclude Include="Src\Transform.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Shaders\PixelShader.hlsl">
+    <FxCompile Include="Shaders\DiffusePixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <DisableOptimizations Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableOptimizations>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Directory)%(Filename).cso</ObjectFileOutput>
     </FxCompile>
-    <FxCompile Include="Shaders\VertexShader.hlsl">
+    <FxCompile Include="Shaders\DiffuseVertexShader.hlsl">
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Directory)%(Filename).cso</ObjectFileOutput>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+    </FxCompile>
+    <FxCompile Include="Shaders\NormalPixelShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Directory)%(Filename).cso</ObjectFileOutput>
+    </FxCompile>
+    <FxCompile Include="Shaders\NormalVertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Directory)%(Filename).cso</ObjectFileOutput>
     </FxCompile>

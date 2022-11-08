@@ -1,32 +1,32 @@
 #pragma once
 
 #include "DeviceResources.h"
-#include "ShaderStructs.h"
 #include "Model.h"
+#include "ShaderManager.h"
 
 class Renderer
 {
 private:
     std::shared_ptr<DeviceResources> m_deviceResources;
+    std::shared_ptr<ShaderManager> m_shaderManager;
     ConstantBufferStruct m_constantBufferData;
-    Microsoft::WRL::ComPtr<ID3D11InputLayout> m_pInputLayout;
-    Microsoft::WRL::ComPtr<ID3D11VertexShader> m_pVertexShader;
-    Microsoft::WRL::ComPtr<ID3D11PixelShader> m_pPixelShader;
-    unsigned int m_frameCount;
     std::vector<Model *> m_models;
+    unsigned int m_frameCount;
 
-    HRESULT CreateShaders();
     void CreateViewAndPerspective();
 
 public:
-    Renderer(std::shared_ptr<DeviceResources> deviceResources);
+    Renderer(
+        std::shared_ptr<DeviceResources> deviceResources,
+        std::shared_ptr<ShaderManager> shaderManager);
     ~Renderer();
 
-    void CreateDeviceDependentResources();
     void CreateWindowSizeDependentResources();
     void SetupScene();
     void Tick();
     void Render();
+
+    void SetCurrentShader(int i) { m_shaderManager->SetCurrentShader(i); }
 
     std::vector<Model *> &GetModels() { return m_models; }
 };

@@ -51,11 +51,14 @@ void GUI::Render()
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
-void GUI::Window(float *clearColor)
+void GUI::MainWindow(float *clearColor, int *currentShader)
 {
     static int counter = 0;
 
     ImGui::Begin("General"); // Create a window called "Hello, world!" and append into it.
+
+    ImGui::Combo("Shader", currentShader, ShaderTypeToCstring, IM_ARRAYSIZE(ShaderTypeToCstring), ShaderType::COUNT);
+    ImGui::Separator();
 
     ImGui::ColorEdit3("clear color", clearColor); // Edit 3 floats representing a color
 

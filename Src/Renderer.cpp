@@ -1,69 +1,15 @@
 #include <cmath>
 
 #include "Renderer.h"
+#include "ShaderStructs.h"
 
-Renderer::Renderer(std::shared_ptr<DeviceResources> deviceResources)
+Renderer::Renderer(
+    std::shared_ptr<DeviceResources> deviceResources,
+    std::shared_ptr<ShaderManager> shaderManager)
 {
     m_deviceResources = deviceResources;
+    m_shaderManager = shaderManager;
     m_frameCount = 0;
-}
-
-// Create Direct3D shader resources by loading the .cso files.
-HRESULT Renderer::CreateShaders()
-{
-    HRESULT hr = S_OK;
-
-    // Use the Direct3D device to load resources into graphics memory.
-    ID3D11Device *device = m_deviceResources->GetDevice();
-    ID3DBlob *vertexShaderBlob = NULL;
-    if (FAILED(
-            D3DReadFileToBlob(L"VertexShader.cso", &vertexShaderBlob)))
-    {
-        printf("Failed to read vertex shader blob\n");
-    }
-
-    ID3DBlob *pixelShaderBlob = NULL;
-    if (FAILED(D3DReadFileToBlob(L"PixelShader.cso", &pixelShaderBlob)))
-    {
-        printf("Failed to read pixel shader blob\n");
-    }
-
-    if (FAILED(device->CreateVertexShader(vertexShaderBlob->GetBufferPointer(),
-                                          vertexShaderBlob->GetBufferSize(),
-                                          nullptr,
-                                          m_pVertexShader.GetAddressOf())))
-    {
-        printf("Failed to create vertex shader\n");
-    }
-
-    if (FAILED(device->CreatePixelShader(pixelShaderBlob->GetBufferPointer(),
-                                         pixelShaderBlob->GetBufferSize(),
-                                         nullptr,
-                                         m_pPixelShader.GetAddressOf())))
-    {
-        printf("Failed to create pixel shader\n");
-    }
-
-    D3D11_INPUT_ELEMENT_DESC iaDesc[] =
-        {
-            {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,
-             0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-
-            {"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,
-             0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
-
-            {"COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT,
-             0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
-        };
-
-    hr = device->CreateInputLayout(
-        iaDesc,
-        ARRAYSIZE(iaDesc),
-        vertexShaderBlob->GetBufferPointer(),
-        vertexShaderBlob->GetBufferSize(),
-        &m_pInputLayout);
-
-    return hr;
 }
 
 // Create the view matrix and create the perspective matrix.
@@ -96,13 +42,6 @@ void Renderer::CreateViewAndPerspective()
             view * proj));
 }
 
-// Create device-dependent resources for rendering.
-void Renderer::CreateDeviceDependentResources()
-{
-    // Compile shaders using the Effects library.
-    CreateShaders();
-}
-
 void Renderer::CreateWindowSizeDependentResources()
 {
     CreateViewAndPerspective();
@@ -114,20 +53,14 @@ void Renderer::SetupScene()
     Model *plane = new Model(
         "Plane",
         "Res/Plane.arccmdl",
-        m_deviceResources,
-        m_pInputLayout,
-        m_pVertexShader,
-        m_pPixelShader);
+        m_deviceResources);
     Transform &tPlane = plane->GetTransform();
     tPlane.SetTranslation({0.0f, -1.5f, 0.0f});
 
     Model *cornellBox = new Model(
         "CornellBox",
         "Res/CornellBox.arccmdl",
-        m_deviceResources,
-        m_pInputLayout,
-        m_pVertexShader,
-        m_pPixelShader);
+        m_deviceResources);
 
     Transform &tCornellBox = cornellBox->GetTransform();
     tCornellBox.SetTranslation({0.0f, 0.0f, -1.75f});
@@ -141,10 +74,7 @@ void Renderer::SetupScene()
     Model *ball = new Model(
         "Ball",
         "Res/Ball.arccmdl",
-        m_deviceResources,
-        m_pInputLayout,
-        m_pVertexShader,
-        m_pPixelShader);
+        m_deviceResources);
     Transform &tBall = ball->GetTransform();
     tBall.SetTranslation({0.2, -0.1f, 0.0f});
     tBall.SetRotation(
@@ -157,10 +87,7 @@ void Renderer::SetupScene()
     Model *monkey = new Model(
         "Monkey",
         "Res/Monkey.arccmdl",
-        m_deviceResources,
-        m_pInputLayout,
-        m_pVertexShader,
-        m_pPixelShader);
+        m_deviceResources);
     Transform &tMonkey = monkey->GetTransform();
     tMonkey.SetTranslation({2.25, 0.0f, -3.0f});
     tMonkey.SetRotation(
@@ -191,7 +118,9 @@ void Renderer::Tick()
 void Renderer::Render()
 {
     for (Model *&model : m_models)
-        model->Render(m_constantBufferData.viewproj);
+        model->Render(
+            m_constantBufferData.viewproj,
+            m_shaderManager->GetCurrentShader());
 }
 
 Renderer::~Renderer()

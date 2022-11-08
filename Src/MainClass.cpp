@@ -93,6 +93,7 @@ HRESULT MainClass::Run(std::shared_ptr<DeviceResources> deviceResources,
     PeekMessage(&msg, NULL, 0U, 0U, PM_NOREMOVE);
 
     float clearColor[4] = {0.0f, 0.0f, 0.f, 1.0f};
+    int currentShader = 0;
 
     while (WM_QUIT != msg.message)
     {
@@ -109,7 +110,9 @@ HRESULT MainClass::Run(std::shared_ptr<DeviceResources> deviceResources,
         else
         {
             GUI::StartFrame();
-            GUI::Window(clearColor);
+            GUI::MainWindow(clearColor, &currentShader);
+
+            renderer->SetCurrentShader(currentShader);
 
             for (Model *&model : renderer->GetModels())
                 GUI::ModelWindow(model);

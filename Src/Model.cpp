@@ -5,16 +5,10 @@
 Model::Model(
     const std::string name,
     const std::string &filePath,
-    std::shared_ptr<DeviceResources> deviceResources,
-    Microsoft::WRL::ComPtr<ID3D11InputLayout> inputLayout,
-    Microsoft::WRL::ComPtr<ID3D11VertexShader> vertexShader,
-    Microsoft::WRL::ComPtr<ID3D11PixelShader> pixelShader)
+    std::shared_ptr<DeviceResources> deviceResources)
     : m_name(name)
 {
     m_deviceResources = deviceResources;
-    m_pInputLayout = inputLayout;
-    m_pVertexShader = vertexShader;
-    m_pPixelShader = pixelShader;
     CreateFromFile(filePath);
     InitializeBuffers();
 }
@@ -124,20 +118,23 @@ void Model::Update(UINT frameCount)
         DirectX::XMMatrixTranspose(m_transform.GetTransformMatrix()));
 }
 
-void Model::Render(DirectX::XMFLOAT4X4 viewproj)
+void Model::Render(
+    DirectX::XMFLOAT4X4 viewproj,
+    ShaderStruct *shader)
+
 {
     // Use the Direct3D device context to draw.
     ID3D11DeviceContext *context = m_deviceResources->GetDeviceContext();
 
     // Set up the vertex shader stage.
     context->VSSetShader(
-        m_pVertexShader.Get(),
+        shader->vertexShader,
         nullptr,
         0);
 
     // Set up the pixel shader stage.
     context->PSSetShader(
-        m_pPixelShader.Get(),
+        shader->pixelShader,
         nullptr,
         0);
 
@@ -173,7 +170,7 @@ void Model::Render(DirectX::XMFLOAT4X4 viewproj)
 
     context->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    context->IASetInputLayout(m_pInputLayout.Get());
+    context->IASetInputLayout(shader->inputLayout);
 
     // Calling Draw tells Direct3D to start sending commands to the graphics device.
     context->DrawIndexed(

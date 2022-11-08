@@ -11,7 +11,7 @@ namespace GUI
                     ID3D11Device *device,
                     ID3D11DeviceContext *deviceContext);
     void StartFrame();
-    void Window(float *clearColor);
+    void MainWindow(float *clearColor, int *currentShader);
     void ModelWindow(Model *model);
     void Render();
     LRESULT ProcHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
