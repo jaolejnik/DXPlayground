@@ -6,30 +6,28 @@ cbuffer ModelViewProjectionConstantBuffer : register(b0)
 
 struct vsIn
 {
-    float3 vPos   : POSITION;
-    float3 vNormal: NORMAL;
-    float3 vColor : COLOR;
+    float3 position: POSITION;
+    float3 normal: NORMAL;
+    float3 color: COLOR;
 };
 
 struct vsOut 
 {
-    float4 Position : SV_POSITION;  
-    float4 Color    : COLOR;
+    float4 position: SV_POSITION;
+    float3 normal: NORMAL;
 };
 
-vsOut main(vsIn input) // main is the default function name
+vsOut main(vsIn input) 
 {
-    vsOut Output;
+    vsOut output;
 
-    float4 pos = float4(input.vPos, 1.0f);
+    float4 pos = float4(input.position, 1.0f);
 
-    // Transform the position from object space to homogeneous projection space
     pos = mul(pos, model);
     pos = mul(pos, viewproj);
-    Output.Position = pos;
 
-    // Just pass through the color data
-    Output.Color = float4(input.vNormal, 1.0f);
+    output.position = pos;
+    output.normal = input.normal;
 
-    return Output;
+    return output;
 }
