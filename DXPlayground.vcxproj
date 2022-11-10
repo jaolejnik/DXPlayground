@@ -111,6 +111,7 @@
     <ClCompile Include="external\dearimgui\imgui_impl_win32.cpp" />
     <ClCompile Include="external\dearimgui\imgui_tables.cpp" />
     <ClCompile Include="external\dearimgui\imgui_widgets.cpp" />
+    <ClCompile Include="Src\Camera.cpp" />
     <ClCompile Include="Src\DeviceResources.cpp" />
     <ClCompile Include="Src\GUI.cpp" />
     <ClCompile Include="Src\main.cpp" />
@@ -130,6 +131,7 @@
     <ClInclude Include="external\dearimgui\imstb_textedit.h" />
     <ClInclude Include="external\dearimgui\imstb_truetype.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="Src\Camera.h" />
     <ClInclude Include="Src\DeviceResources.h" />
     <ClInclude Include="Src\GUI.h" />
     <ClInclude Include="Src\MainClass.h" />

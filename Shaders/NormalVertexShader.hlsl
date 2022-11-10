@@ -4,6 +4,12 @@ cbuffer ModelViewProjectionConstantBuffer : register(b0)
     matrix viewproj;
 };
 
+cbuffer SceneConstantBuffer : register(b1)
+{
+    float3 cameraPosition;
+    float3 lightPosition;
+}
+
 struct vsIn
 {
     float3 position: POSITION;
@@ -27,7 +33,8 @@ vsOut main(vsIn input)
     pos = mul(pos, viewproj);
 
     output.position = pos;
-    output.normal = input.normal;
+    // works only for uniform scale
+    output.normal = normalize(mul(float4(input.normal, 0.0f), model).xyz);
 
     return output;
 }

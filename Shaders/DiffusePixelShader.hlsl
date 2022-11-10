@@ -1,14 +1,15 @@
 struct psIn
 {
-	float4 Position : SV_POSITION;  // interpolated vertex position (system value)
-	float4 Color    : COLOR0;       // interpolated diffuse color
+	float4 position : SV_POSITION;  
+	float4 color    : COLOR;       
+    float3 normal   : NORMAL;
+    float3 viewDir  : POSITION0;
+    float3 lightDir : POSITION1;
 };
 
-float4 main(psIn Input) : SV_TARGET
+float4 main(psIn input) : SV_TARGET
 {
-	float4 Output;
+	float3 diffuse = input.color.xyz * max(dot(input.normal, input.lightDir), 0.0f);
 
-	Output = Input.Color;
-
-	return Output;
+	return float4(diffuse, 0.0f); 
 }

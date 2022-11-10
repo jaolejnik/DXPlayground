@@ -9,7 +9,7 @@ class Model
 private:
     const std::string m_name;
     Transform m_transform;
-    ConstantBufferStruct m_constantBufferData;
+    TransformBufferStruct m_transformBufferData;
     std::vector<VertexPNC> m_vertices;
     std::vector<uint16_t> m_indices;
 
@@ -17,7 +17,8 @@ private:
     std::shared_ptr<DeviceResources> m_deviceResources;
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_pVertexBuffer;
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_pIndexBuffer;
-    Microsoft::WRL::ComPtr<ID3D11Buffer> m_pConstantBuffer;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> m_pTransformBuffer;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> m_pSceneBuffer;
 
     bool CreateFromFile(const std::string &filePath);
     HRESULT InitializeBuffers();
@@ -32,7 +33,8 @@ public:
     void Animate(UINT frameCount);
     void Update(UINT frameCount);
     void Render(
-        DirectX::XMFLOAT4X4 viewproj,
+        TransformBufferStruct *transformBufferData,
+        SceneBufferStruct *sceneBufferData,
         ShaderStruct *shader);
 
     const char *GetName() { return m_name.c_str(); }

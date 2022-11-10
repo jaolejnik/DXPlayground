@@ -14,16 +14,24 @@ enum ShaderType
     Normal,
     COUNT,
 };
+
 struct ShaderStruct
 {
     ID3D11VertexShader *vertexShader;
     ID3D11PixelShader *pixelShader;
     ID3D11InputLayout *inputLayout;
 };
-struct ConstantBufferStruct
+
+struct TransformBufferStruct
 {
     DirectX::XMFLOAT4X4 model;
     DirectX::XMFLOAT4X4 viewproj;
+};
+
+struct SceneBufferStruct
+{
+    DirectX::XMFLOAT4 cameraPosition;
+    DirectX::XMFLOAT4 lightPosition;
 };
 
 struct VertexPNC

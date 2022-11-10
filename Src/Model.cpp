@@ -30,14 +30,13 @@ bool Model::CreateFromFile(const std::string &filePath)
         modelFile >> vpnc.position.y;
         modelFile >> vpnc.position.z;
 
-        // TODO find out why normal and color memory are swapped
-        modelFile >> vpnc.color.x;
-        modelFile >> vpnc.color.y;
-        modelFile >> vpnc.color.z;
-
         modelFile >> vpnc.normal.x;
         modelFile >> vpnc.normal.y;
         modelFile >> vpnc.normal.z;
+
+        modelFile >> vpnc.color.x;
+        modelFile >> vpnc.color.y;
+        modelFile >> vpnc.color.z;
 
         m_vertices.push_back(vpnc);
     }
@@ -85,15 +84,24 @@ HRESULT Model::InitializeBuffers()
         &iData,
         &m_pIndexBuffer);
 
-    // Create constant buffer:
-    CD3D11_BUFFER_DESC cbDesc(
-        sizeof(ConstantBufferStruct),
+    // Create constant buffers
+    CD3D11_BUFFER_DESC cbtDesc(
+        sizeof(TransformBufferStruct),
         D3D11_BIND_CONSTANT_BUFFER);
 
     hr = device->CreateBuffer(
-        &cbDesc,
+        &cbtDesc,
         nullptr,
-        m_pConstantBuffer.GetAddressOf());
+        &m_pTransformBuffer);
+
+    CD3D11_BUFFER_DESC cbsDesc(
+        sizeof(SceneBufferStruct),
+        D3D11_BIND_CONSTANT_BUFFER);
+
+    hr = device->CreateBuffer(
+        &cbsDesc,
+        nullptr,
+        &m_pSceneBuffer);
 
     return hr;
 }
@@ -111,15 +119,14 @@ void Model::Animate(UINT frameCount)
 
 void Model::Update(UINT frameCount)
 {
-    // Animate(frameCount);
-
     DirectX::XMStoreFloat4x4(
-        &m_constantBufferData.model,
+        &m_transformBufferData.model,
         DirectX::XMMatrixTranspose(m_transform.GetTransformMatrix()));
 }
 
 void Model::Render(
-    DirectX::XMFLOAT4X4 viewproj,
+    TransformBufferStruct *transformBufferData,
+    SceneBufferStruct *sceneBufferData,
     ShaderStruct *shader)
 
 {
@@ -141,14 +148,27 @@ void Model::Render(
     context->VSSetConstantBuffers(
         0,
         1,
-        m_pConstantBuffer.GetAddressOf());
+        m_pTransformBuffer.GetAddressOf());
 
-    m_constantBufferData.viewproj = viewproj;
+    m_transformBufferData.viewproj = transformBufferData->viewproj;
     context->UpdateSubresource(
-        m_pConstantBuffer.Get(),
+        m_pTransformBuffer.Get(),
         0,
         nullptr,
-        &m_constantBufferData,
+        &m_transformBufferData,
+        0,
+        0);
+
+    context->VSSetConstantBuffers(
+        1,
+        1,
+        m_pSceneBuffer.GetAddressOf());
+
+    context->UpdateSubresource(
+        m_pSceneBuffer.Get(),
+        0,
+        nullptr,
+        sceneBufferData,
         0,
         0);
 

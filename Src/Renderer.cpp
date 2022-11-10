@@ -9,37 +9,22 @@ Renderer::Renderer(
 {
     m_deviceResources = deviceResources;
     m_shaderManager = shaderManager;
+    m_camera = new Camera(
+        {0.0f, 0.7f, 1.5f},
+        {0.0f, -0.1f, 0.0f},
+        {0.0f, 1.0f, 0.0f});
     m_frameCount = 0;
 }
 
 // Create the view matrix and create the perspective matrix.
 void Renderer::CreateViewAndPerspective()
 {
-    // Use DirectXMath to create view and perspective matrices.
-    DirectX::XMVECTOR eye = DirectX::XMVectorSet(0.0f, 0.7f, 1.5f, 0.f);
-    DirectX::XMVECTOR at = DirectX::XMVectorSet(0.0f, -0.1f, 0.0f, 0.f);
-    DirectX::XMVECTOR up = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.f);
-
-    DirectX::XMMATRIX view =
-        DirectX::XMMatrixLookAtRH(
-            eye,
-            at,
-            up);
-
     float aspectRatioX = m_deviceResources->GetAspectRatio();
-    float aspectRatioY = aspectRatioX < (16.0f / 9.0f) ? aspectRatioX / (16.0f / 9.0f) : 1.0f;
-
-    DirectX::XMMATRIX proj =
-        DirectX::XMMatrixPerspectiveFovRH(
-            2.0f * std::atan(std::tan(DirectX::XMConvertToRadians(70) * 0.5f) / aspectRatioY),
-            aspectRatioX,
-            0.01f,
-            100.0f);
+    DirectX::XMMATRIX viewproj = m_camera->GetViewProjectionMatrix(aspectRatioX);
 
     DirectX::XMStoreFloat4x4(
-        &m_constantBufferData.viewproj,
-        DirectX::XMMatrixTranspose(
-            view * proj));
+        &m_transformBufferData.viewproj,
+        DirectX::XMMatrixTranspose(viewproj));
 }
 
 void Renderer::CreateWindowSizeDependentResources()
@@ -49,6 +34,9 @@ void Renderer::CreateWindowSizeDependentResources()
 
 void Renderer::SetupScene()
 {
+    DirectX::XMFLOAT3 cameraPos = m_camera->GetPosition();
+    m_sceneBufferData.cameraPosition = {cameraPos.x, cameraPos.y, cameraPos.z, 1.0f};
+    m_sceneBufferData.lightPosition = {cameraPos.x, cameraPos.y + 2.0f, cameraPos.z, 1.0f};
 
     Model *plane = new Model(
         "Plane",
@@ -119,12 +107,15 @@ void Renderer::Render()
 {
     for (Model *&model : m_models)
         model->Render(
-            m_constantBufferData.viewproj,
+            &m_transformBufferData,
+            &m_sceneBufferData,
             m_shaderManager->GetCurrentShader());
 }
 
 Renderer::~Renderer()
 {
+    delete m_camera;
+
     for (Model *&model : m_models)
         delete model;
 }

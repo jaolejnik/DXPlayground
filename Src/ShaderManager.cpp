@@ -21,10 +21,10 @@ void ShaderManager::CreateInputLayout(const ShaderType &shaderType, std::vector<
              0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
 
             {"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT,
-             0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
+             0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
 
             {"COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT,
-             0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0},
+             0, 24, D3D11_INPUT_PER_VERTEX_DATA, 0},
         };
         break;
 
@@ -75,7 +75,6 @@ HRESULT ShaderManager::CreateShader(const ShaderType &shaderType)
         vertexShaderBlob->GetBufferSize(),
         &shader->inputLayout);
 
-    shader->vertexShader;
     m_shaders.push_back(shader);
 
     return hr;
