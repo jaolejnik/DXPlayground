@@ -4,20 +4,22 @@
 
 struct SHSample
 {
-    DirectX::XMFLOAT3 spherical;
     DirectX::XMFLOAT3 vector;
-    double *coeff;
+    double theta;
+    double phi;
+    std::vector<double> coeff;
 };
 
 class SphericalHarmonics
 {
 private:
-    SHSample *m_samples;
+    std::vector<SHSample *> m_samples;
 
 public:
     SphericalHarmonics() {}
-    ~SphericalHarmonics() {}
+    ~SphericalHarmonics();
 
-    void GenerateSamples(int n, int bands);
-    double SH(int l, int m, double theta, double phi);
+    void InitializeSamplesArray(int sqrt_n_samples, int n_bands);
+    void GenerateSamples(int sqrt_n_samples, int bands);
+    double EvaluateSH(int l, int m, double theta, double phi);
 };
