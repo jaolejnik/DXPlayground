@@ -17,6 +17,7 @@ m, l = 0, 1
 
 # Calculate the spherical harmonic Y(l,m) and normalize to [0,1]
 fcolors = sph_harm(m, l, theta, phi).real
+print(fcolors.size)
 fmax, fmin = fcolors.max(), fcolors.min()
 fcolors = (fcolors - fmin)/(fmax - fmin)
 

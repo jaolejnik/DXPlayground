@@ -1,5 +1,7 @@
 #pragma once
 
+constexpr double sqrt2 = 1.41421356237309504880;
+
 constexpr double factorial[35] = {
     1.0,
     1.0,

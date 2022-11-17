@@ -13,13 +13,15 @@ struct SHSample
 class SphericalHarmonics
 {
 private:
-    std::vector<SHSample *> m_samples;
+    double K(int l, int m);
+    double P(int l, int m, double x);
 
 public:
-    SphericalHarmonics() {}
+    std::vector<SHSample *> m_samples;
+
+    SphericalHarmonics(int sqrtSampleCount, int bandCount);
     ~SphericalHarmonics();
 
-    void InitializeSamplesArray(int sqrt_n_samples, int n_bands);
-    void GenerateSamples(int sqrt_n_samples, int bands);
+    void GenerateSamples(int sqrtSampleCount, int bandCount);
     double EvaluateSH(int l, int m, double theta, double phi);
 };

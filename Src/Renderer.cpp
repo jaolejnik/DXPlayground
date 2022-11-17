@@ -2,6 +2,7 @@
 
 #include "Renderer.h"
 #include "ShaderStructs.h"
+#include "Sh.h"
 
 Renderer::Renderer(
     std::shared_ptr<DeviceResources> deviceResources,

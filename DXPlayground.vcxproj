@@ -118,6 +118,7 @@
     <ClCompile Include="Src\MainClass.cpp" />
     <ClCompile Include="Src\Model.cpp" />
     <ClCompile Include="Src\Renderer.cpp" />
+    <ClCompile Include="Src\Sh.cpp" />
     <ClCompile Include="Src\ShaderManager.cpp" />
     <ClCompile Include="Src\Transform.cpp" />
   </ItemGroup>
@@ -136,8 +137,10 @@
     <ClInclude Include="Src\Factorial.h" />
     <ClInclude Include="Src\GUI.h" />
     <ClInclude Include="Src\MainClass.h" />
+    <ClInclude Include="Src\MathUtils.h" />
     <ClInclude Include="Src\Model.h" />
     <ClInclude Include="Src\Renderer.h" />
+    <ClInclude Include="Src\Sh.h" />
     <ClInclude Include="Src\ShaderManager.h" />
     <ClInclude Include="Src\ShaderStructs.h" />
     <ClInclude Include="Src\Transform.h" />
