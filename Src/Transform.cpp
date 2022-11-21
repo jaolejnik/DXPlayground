@@ -22,6 +22,11 @@ void Transform::SetScale(DirectX::XMFLOAT3 v)
     m_scale = v;
 }
 
+void Transform::SetScaleUniform(float s)
+{
+    m_scale = {s, s, s};
+}
+
 DirectX::XMMATRIX Transform::GetTransformMatrix()
 {
     DirectX::XMMATRIX tM = DirectX::XMMatrixTranslationFromVector(

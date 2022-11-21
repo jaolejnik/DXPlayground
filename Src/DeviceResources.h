@@ -13,6 +13,7 @@ public:
     HRESULT CreateWindowResources(HWND hWnd);
 
     HRESULT ConfigureBackBuffer();
+    HRESULT ConfigureRasterStates();
     HRESULT ReleaseBackBuffer();
     HRESULT GoFullScreen();
     HRESULT GoWindowed();
@@ -23,6 +24,9 @@ public:
     ID3D11DeviceContext *GetDeviceContext() { return m_pd3dDeviceContext.Get(); };
     ID3D11RenderTargetView *GetRenderTarget() { return m_pRenderTarget.Get(); }
     ID3D11DepthStencilView *GetDepthStencil() { return m_pDepthStencilView.Get(); }
+    ID3D11RasterizerState *GetCullBackState() { return m_pCullBack.Get(); }
+    ID3D11RasterizerState *GetCullFrontState() { return m_pCullFront.Get(); }
+    ID3D11RasterizerState *GetCullNoneState() { return m_pCullNone.Get(); }
 
     void Present();
 
@@ -44,4 +48,9 @@ private:
     D3D_FEATURE_LEVEL m_featureLevel;
     D3D11_TEXTURE2D_DESC m_bbDesc;
     D3D11_VIEWPORT m_viewport;
+
+    // Direct3D raster states
+    Microsoft::WRL::ComPtr<ID3D11RasterizerState> m_pCullBack;
+    Microsoft::WRL::ComPtr<ID3D11RasterizerState> m_pCullFront;
+    Microsoft::WRL::ComPtr<ID3D11RasterizerState> m_pCullNone;
 };

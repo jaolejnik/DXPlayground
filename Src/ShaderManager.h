@@ -23,4 +23,5 @@ public:
 
     void SetCurrentShader(int i) { m_currentShader = i; }
     ShaderStruct *GetCurrentShader() { return m_shaders[m_currentShader]; }
+    ShaderStruct *GetShader(ShaderType shaderType) { return m_shaders[static_cast<int>(shaderType)]; }
 };

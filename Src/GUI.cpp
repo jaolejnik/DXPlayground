@@ -57,7 +57,7 @@ void GUI::MainWindow(float *clearColor, int *currentShader)
 
     ImGui::Begin("General"); // Create a window called "Hello, world!" and append into it.
 
-    ImGui::Combo("Shader", currentShader, ShaderTypeToCstring, IM_ARRAYSIZE(ShaderTypeToCstring), ShaderType::COUNT);
+    ImGui::Combo("Shader", currentShader, ShaderTypeToCstring, IM_ARRAYSIZE(ShaderTypeToCstring), static_cast<int>(ShaderType::COUNT));
     ImGui::Separator();
 
     ImGui::ColorEdit3("clear color", clearColor); // Edit 3 floats representing a color
@@ -78,7 +78,7 @@ void GUI::ModelWindow(Model *model)
         DirectX::XMConvertToDegrees(tf.m_rotation.z),
     };
 
-    ImGui::Begin(model->GetName());
+    ImGui::Begin(model->GetName().c_str());
 
     ImGui::Text("TRANSLATION");
     ImGui::SliderFloat("T X", &(tf.m_translation.x), -10.0f, 10.0f);

@@ -20,6 +20,7 @@ public:
     void SetTranslation(DirectX::XMFLOAT3 v);
     void SetRotation(DirectX::XMFLOAT3 v);
     void SetScale(DirectX::XMFLOAT3 v);
+    void SetScaleUniform(float s);
 
     DirectX::XMMATRIX GetTransformMatrix();
 };

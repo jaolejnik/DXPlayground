@@ -16,6 +16,7 @@ void ShaderManager::CreateInputLayout(const ShaderType &shaderType, std::vector<
     {
     case ShaderType::Diffuse:
     case ShaderType::Normal:
+    case ShaderType::Skybox:
         iaDesc = {
             {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,
              0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0},
@@ -40,7 +41,7 @@ HRESULT ShaderManager::CreateShader(const ShaderType &shaderType)
     // Use the Direct3D device to load resources into graphics memory.
     ID3D11Device *device = m_deviceResources->GetDevice();
 
-    const std::string stmp = std::string(ShaderTypeToCstring[shaderType]);
+    const std::string stmp = std::string(ShaderTypeToCstring[static_cast<int>(shaderType)]);
     const std::wstring shaderName = std::wstring(stmp.begin(), stmp.end());
     std::wstring vertexShaderFile = shaderName + L"VertexShader.cso";
     std::wstring pixelShaderFile = shaderName + L"PixelShader.cso";

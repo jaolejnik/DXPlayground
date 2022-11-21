@@ -180,6 +180,7 @@ HRESULT DeviceResources::CreateWindowResources(HWND hWnd)
 
     // Configure the back buffer, stencil buffer, and viewport.
     hr = ConfigureBackBuffer();
+    hr = ConfigureRasterStates();
 
     return hr;
 }
@@ -230,6 +231,33 @@ HRESULT DeviceResources::ConfigureBackBuffer()
     m_pd3dDeviceContext->RSSetViewports(
         1,
         &m_viewport);
+
+    return hr;
+}
+
+HRESULT DeviceResources::ConfigureRasterStates()
+{
+    HRESULT hr = S_OK;
+
+    D3D11_RASTERIZER_DESC cbDesc;
+    ZeroMemory(&cbDesc, sizeof(D3D11_RASTERIZER_DESC));
+    cbDesc.FillMode = D3D11_FILL_SOLID;
+    cbDesc.CullMode = D3D11_CULL_BACK;
+    hr = m_pd3dDevice->CreateRasterizerState(&cbDesc, &m_pCullBack);
+
+    D3D11_RASTERIZER_DESC cfDesc;
+    ZeroMemory(&cfDesc, sizeof(D3D11_RASTERIZER_DESC));
+    cfDesc.FillMode = D3D11_FILL_SOLID;
+    cfDesc.CullMode = D3D11_CULL_FRONT;
+    hr = m_pd3dDevice->CreateRasterizerState(&cfDesc, &m_pCullFront);
+
+    D3D11_RASTERIZER_DESC cnDesc;
+    ZeroMemory(&cnDesc, sizeof(D3D11_RASTERIZER_DESC));
+    cnDesc.FillMode = D3D11_FILL_SOLID;
+    cnDesc.CullMode = D3D11_CULL_NONE;
+    hr = m_pd3dDevice->CreateRasterizerState(&cnDesc, &m_pCullNone);
+
+    m_pd3dDeviceContext->RSSetState(m_pCullBack.Get());
 
     return hr;
 }

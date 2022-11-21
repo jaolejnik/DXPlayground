@@ -39,6 +39,14 @@ void Renderer::SetupScene()
     m_sceneBufferData.cameraPosition = {cameraPos.x, cameraPos.y, cameraPos.z, 1.0f};
     m_sceneBufferData.lightPosition = {cameraPos.x, cameraPos.y + 2.0f, cameraPos.z, 1.0f};
 
+    Model *skybox = new Model(
+        "Skybox",
+        "",
+        m_deviceResources);
+
+    Transform &tSkybox = skybox->GetTransform();
+    tSkybox.SetScaleUniform(20.0f);
+
     Model *plane = new Model(
         "Plane",
         "Res/Plane.arccmdl",
@@ -86,6 +94,7 @@ void Renderer::SetupScene()
             DirectX::XMConvertToRadians(0.0f),
         });
 
+    m_models.push_back(skybox);
     m_models.push_back(plane);
     m_models.push_back(cornellBox);
     m_models.push_back(ball);
@@ -107,10 +116,15 @@ void Renderer::Tick()
 void Renderer::Render()
 {
     for (Model *&model : m_models)
+    {
+        ShaderStruct *shader = model->GetName() == "Skybox"
+                                   ? m_shaderManager->GetShader(ShaderType::Skybox)
+                                   : m_shaderManager->GetCurrentShader();
         model->Render(
             &m_transformBufferData,
             &m_sceneBufferData,
-            m_shaderManager->GetCurrentShader());
+            shader);
+    }
 }
 
 Renderer::~Renderer()

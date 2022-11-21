@@ -6,12 +6,14 @@ constexpr const char *ShaderTypeToCstring[] =
     {
         "Diffuse",
         "Normal",
+        "Skybox",
 };
 
-enum ShaderType
+enum class ShaderType
 {
     Diffuse,
     Normal,
+    Skybox,
     COUNT,
 };
 

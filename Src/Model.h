@@ -20,6 +20,9 @@ private:
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_pTransformBuffer;
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_pSceneBuffer;
 
+    void CreateSphere(const float radius,
+                      const uint16_t longitude_split_count,
+                      const uint16_t latitude_split_count);
     bool CreateFromFile(const std::string &filePath);
     HRESULT InitializeBuffers();
 
@@ -37,6 +40,6 @@ public:
         SceneBufferStruct *sceneBufferData,
         ShaderStruct *shader);
 
-    const char *GetName() { return m_name.c_str(); }
+    const std::string &GetName() { return m_name; }
     Transform &GetTransform() { return m_transform; }
 };

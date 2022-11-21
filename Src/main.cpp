@@ -24,8 +24,9 @@ INT WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     if (SUCCEEDED(hr))
     {
         std::vector<ShaderType> shaders = {
-            Diffuse,
-            Normal,
+            ShaderType::Diffuse,
+            ShaderType::Normal,
+            ShaderType::Skybox,
         };
 
         // Instantiate the device manager class.
