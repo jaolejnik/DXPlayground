@@ -10,6 +10,12 @@ class Renderer
 private:
     std::shared_ptr<DeviceResources> m_deviceResources;
     std::shared_ptr<ShaderManager> m_shaderManager;
+
+    std::vector<Texture *> m_loadedImages;
+    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_pShaderResourceView;
+    Microsoft::WRL::ComPtr<ID3D11SamplerState> m_pSamplerState;
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> m_pTexture;
+
     TransformBufferStruct m_transformBufferData;
     SceneBufferStruct m_sceneBufferData;
     Camera *m_camera;
@@ -17,6 +23,7 @@ private:
     unsigned int m_frameCount;
 
     void CreateViewAndPerspective();
+    void LoadCubeMap(const std::string &dirPath);
 
 public:
     Renderer(

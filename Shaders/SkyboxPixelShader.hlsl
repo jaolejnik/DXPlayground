@@ -1,5 +1,4 @@
 TextureCube skyboxTexture : register(t0);
-
 SamplerState textureSampler : register(s0);
 
 struct psIn

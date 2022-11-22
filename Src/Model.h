@@ -36,14 +36,16 @@ public:
         const std::string name,
         const std::string &filePath,
         std::shared_ptr<DeviceResources> deviceResources);
-    ~Model();
+    ~Model() {}
 
-    void SetCubeMap(const std::string &dirPath);
     void Animate(UINT frameCount);
     void Update(UINT frameCount);
     void Render(
         TransformBufferStruct *transformBufferData,
         SceneBufferStruct *sceneBufferData,
+        ID3D11ShaderResourceView *resourceView,
+        ID3D11SamplerState *sampler,
+        ID3D11RasterizerState *rasterState,
         ShaderStruct *shader);
 
     const std::string &GetName() { return m_name; }
