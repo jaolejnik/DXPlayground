@@ -44,19 +44,13 @@ void Renderer::SetupScene()
         "",
         m_deviceResources);
 
+    skybox->SetCubeMap("Res/Cubemaps/Yokohama/");
     Transform &tSkybox = skybox->GetTransform();
     tSkybox.SetScaleUniform(20.0f);
 
-    Model *plane = new Model(
-        "Plane",
-        "Res/Plane.arccmdl",
-        m_deviceResources);
-    Transform &tPlane = plane->GetTransform();
-    tPlane.SetTranslation({0.0f, -1.5f, 0.0f});
-
     Model *cornellBox = new Model(
         "CornellBox",
-        "Res/CornellBox.arccmdl",
+        "Res/Models/CornellBox.arccmdl",
         m_deviceResources);
 
     Transform &tCornellBox = cornellBox->GetTransform();
@@ -70,7 +64,7 @@ void Renderer::SetupScene()
 
     Model *ball = new Model(
         "Ball",
-        "Res/Ball.arccmdl",
+        "Res/Models/Ball.arccmdl",
         m_deviceResources);
     Transform &tBall = ball->GetTransform();
     tBall.SetTranslation({0.2, -0.1f, 0.0f});
@@ -83,7 +77,7 @@ void Renderer::SetupScene()
 
     Model *monkey = new Model(
         "Monkey",
-        "Res/Monkey.arccmdl",
+        "Res/Models/Monkey.arccmdl",
         m_deviceResources);
     Transform &tMonkey = monkey->GetTransform();
     tMonkey.SetTranslation({2.25, 0.0f, -3.0f});
@@ -95,7 +89,6 @@ void Renderer::SetupScene()
         });
 
     m_models.push_back(skybox);
-    m_models.push_back(plane);
     m_models.push_back(cornellBox);
     m_models.push_back(ball);
     m_models.push_back(monkey);

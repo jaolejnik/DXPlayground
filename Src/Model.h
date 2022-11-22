@@ -3,6 +3,7 @@
 #include "DeviceResources.h"
 #include "ShaderStructs.h"
 #include "Transform.h"
+#include "Texture.h"
 
 class Model
 {
@@ -12,6 +13,7 @@ private:
     TransformBufferStruct m_transformBufferData;
     std::vector<VertexPNC> m_vertices;
     std::vector<uint16_t> m_indices;
+    std::vector<Texture *> m_loadedImages;
 
     // Direct3D device resources
     std::shared_ptr<DeviceResources> m_deviceResources;
@@ -19,6 +21,9 @@ private:
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_pIndexBuffer;
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_pTransformBuffer;
     Microsoft::WRL::ComPtr<ID3D11Buffer> m_pSceneBuffer;
+    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_pShaderResourceView;
+    Microsoft::WRL::ComPtr<ID3D11SamplerState> m_pSamplerState;
+    Microsoft::WRL::ComPtr<ID3D11Texture2D> m_pTexture;
 
     void CreateSphere(const float radius,
                       const uint16_t longitude_split_count,
@@ -31,8 +36,9 @@ public:
         const std::string name,
         const std::string &filePath,
         std::shared_ptr<DeviceResources> deviceResources);
-    ~Model() {}
+    ~Model();
 
+    void SetCubeMap(const std::string &dirPath);
     void Animate(UINT frameCount);
     void Update(UINT frameCount);
     void Render(

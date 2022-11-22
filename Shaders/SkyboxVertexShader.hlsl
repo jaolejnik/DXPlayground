@@ -8,14 +8,13 @@ struct vsIn
 {
     float3 position : POSITION;
     float3 normal   : NORMAL;
-    float3 color    : COLOR;
+    float3 texcoord : TEXCOORD; 
 };
 
 struct vsOut 
 {
     float4 position : SV_POSITION;  
-    float4 color    : COLOR;
-    float3 normal   : NORMAL;
+    float3 texcoord : TEXCOORD; 
 };
 
 vsOut main(vsIn input) // main is the default function name
@@ -26,9 +25,8 @@ vsOut main(vsIn input) // main is the default function name
     pos = mul(pos, model);
 
     // works only for uniform scale
-    output.normal = normalize(mul(float4(input.normal, 0.0f), model).xyz);
     output.position = mul(pos, viewproj);
-    output.color = float4(input.color, 1.0f);
+    output.texcoord = input.position;
 
     return output;
 }

@@ -120,6 +120,7 @@
     <ClCompile Include="Src\Renderer.cpp" />
     <ClCompile Include="Src\Sh.cpp" />
     <ClCompile Include="Src\ShaderManager.cpp" />
+    <ClCompile Include="Src\Texture.cpp" />
     <ClCompile Include="Src\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -143,6 +144,7 @@
     <ClInclude Include="Src\Sh.h" />
     <ClInclude Include="Src\ShaderManager.h" />
     <ClInclude Include="Src\ShaderStructs.h" />
+    <ClInclude Include="Src\Texture.h" />
     <ClInclude Include="Src\Transform.h" />
   </ItemGroup>
   <ItemGroup>
