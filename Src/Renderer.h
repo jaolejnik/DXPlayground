@@ -4,6 +4,7 @@
 #include "Model.h"
 #include "ShaderManager.h"
 #include "Camera.h"
+#include "Texture.h"
 
 class Renderer
 {

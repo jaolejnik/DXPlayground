@@ -3,7 +3,6 @@
 #include "DeviceResources.h"
 #include "ShaderStructs.h"
 #include "Transform.h"
-#include "Texture.h"
 
 class Model
 {
@@ -13,7 +12,6 @@ private:
     TransformBufferStruct m_transformBufferData;
     std::vector<VertexPNC> m_vertices;
     std::vector<uint16_t> m_indices;
-    std::vector<Texture *> m_loadedImages;
 
     // Direct3D device resources
     std::shared_ptr<DeviceResources> m_deviceResources;

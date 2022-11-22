@@ -16,7 +16,7 @@ void SphericalHarmonics::GenerateSamples(int sqrtSampleCount, int bandCount)
 
     std::random_device rd;
     std::default_random_engine re(rd());
-    std::uniform_real_distribution<double> random(0, sqrtSampleCount);
+    std::uniform_real_distribution<double> random(0, 1);
 
     for (int a = 0; a < sqrtSampleCount; a++)
     {
@@ -24,17 +24,18 @@ void SphericalHarmonics::GenerateSamples(int sqrtSampleCount, int bandCount)
         {
             SHSample *sample = new SHSample;
 
-            double x = (a + random(re) * oneOverN);
-            double y = (b + random(re) * oneOverN);
-            double theta = 2.0 * acos(sqrt(1.0 - x));
+            double x = (a + random(re)) * oneOverN;
+            double y = (b + random(re)) * oneOverN;
+            double test = std::sqrt(1.0 - x);
+            double theta = 2.0 * std::acos(std::sqrt(1.0 - x));
             double phi = 2.0 * DirectX::XM_PI * y;
 
             sample->theta = theta;
             sample->phi = phi;
             sample->vector = {
-                static_cast<float>(sin(theta) * cos(phi)),
-                static_cast<float>(sin(theta) * sin(phi)),
-                static_cast<float>(cos(theta)),
+                static_cast<float>(std::sin(theta) * std::cos(phi)),
+                static_cast<float>(std::sin(theta) * sin(phi)),
+                static_cast<float>(std::cos(theta)),
             };
 
             for (int l = 0; l < bandCount; l++)
@@ -59,11 +60,11 @@ void SphericalHarmonics::GenerateSamples(int sqrtSampleCount, int bandCount)
 double SphericalHarmonics::EvaluateSH(int l, int m, double theta, double phi)
 {
     if (m == 0)
-        return K(l, 0) * P(l, m, cos(theta));
+        return K(l, 0) * P(l, m, std::cos(theta));
     else if (m > 0)
-        return sqrt2 * K(l, m) * cos(m * phi) * P(l, m, cos(theta));
+        return sqrt2 * K(l, m) * std::cos(m * phi) * P(l, m, cos(theta));
     else
-        return sqrt2 * K(l, -m) * sin(-m * phi) * P(l, -m, cos(theta));
+        return sqrt2 * K(l, -m) * std::sin(-m * phi) * P(l, -m, std::cos(theta));
 }
 
 SphericalHarmonics::~SphericalHarmonics()
