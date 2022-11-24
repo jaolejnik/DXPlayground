@@ -3,8 +3,7 @@ struct psIn
 	float4 position : SV_POSITION;  
 	float4 color    : COLOR;       
     float3 normal   : NORMAL;
-    float3 viewDir  : POSITION0;
-    float3 lightDir : POSITION1;
+    float3 lightDir : POSITION0;
 };
 
 float4 main(psIn input) : SV_TARGET

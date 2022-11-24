@@ -1,9 +1,11 @@
 #pragma once
 
 #include "../pch.h"
+#include "Sh.h"
 
 constexpr const char *ShaderTypeToCstring[] =
     {
+        "SHLight",
         "Diffuse",
         "Normal",
         "Skybox",
@@ -11,6 +13,7 @@ constexpr const char *ShaderTypeToCstring[] =
 
 enum class ShaderType
 {
+    SHLight,
     Diffuse,
     Normal,
     Skybox,
@@ -30,11 +33,15 @@ struct TransformBufferStruct
     DirectX::XMFLOAT4X4 viewproj;
 };
 
+static_assert((sizeof(TransformBufferStruct) % 16) == 0, "Transform Constant Buffer size must be 16-byte aligned");
+
 struct SceneBufferStruct
 {
-    DirectX::XMFLOAT4 cameraPosition;
     DirectX::XMFLOAT4 lightPosition;
+    float shCoefficients[16];
 };
+
+static_assert((sizeof(SceneBufferStruct) % 16) == 0, "Scene Constant Buffer size must be 16-byte aligned");
 
 struct VertexPNC
 {

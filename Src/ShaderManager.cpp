@@ -15,6 +15,7 @@ void ShaderManager::CreateInputLayout(const ShaderType &shaderType, std::vector<
     switch (shaderType)
     {
     case ShaderType::Diffuse:
+    case ShaderType::SHLight:
     case ShaderType::Normal:
         iaDesc = {
             {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,

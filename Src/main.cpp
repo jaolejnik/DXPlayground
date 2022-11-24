@@ -24,6 +24,7 @@ INT WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     if (SUCCEEDED(hr))
     {
         std::vector<ShaderType> shaders = {
+            ShaderType::SHLight,
             ShaderType::Diffuse,
             ShaderType::Normal,
             ShaderType::Skybox,

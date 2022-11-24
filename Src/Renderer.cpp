@@ -108,11 +108,8 @@ void Renderer::CreateWindowSizeDependentResources()
     LoadCubeMap("Res/Cubemaps/Yokohama/");
 }
 
-void Renderer::SetupScene()
+void Renderer::SetupModels()
 {
-    DirectX::XMFLOAT3 cameraPos = m_camera->GetPosition();
-    m_sceneBufferData.cameraPosition = {cameraPos.x, cameraPos.y, cameraPos.z, 1.0f};
-    m_sceneBufferData.lightPosition = {cameraPos.x, cameraPos.y + 2.0f, cameraPos.z, 1.0f};
 
     Model *skybox = new Model(
         "Skybox",
@@ -168,6 +165,27 @@ void Renderer::SetupScene()
     m_models.push_back(monkey);
 }
 
+void Renderer::SetupSH()
+{
+    m_sh = new SphericalHarmonics(100, SHbands);
+    m_sh->ProjectToSH(LightPolar);
+}
+
+void Renderer::SetupScene()
+{
+    SetupModels();
+    SetupSH();
+
+    auto shCoeffs = m_sh->GetEncodedCoefficients();
+    for (int i = 0; i < min(SHcoeffCount, 16); i++)
+    {
+        m_sceneBufferData.shCoefficients[i] = shCoeffs[i];
+    }
+
+    DirectX::XMFLOAT3 camPos = m_camera->GetPosition();
+    m_sceneBufferData.lightPosition = {camPos.x, camPos.y, camPos.y, 1.0};
+}
+
 // Update the scene.
 void Renderer::Tick()
 {
@@ -211,6 +229,7 @@ void Renderer::Render()
 Renderer::~Renderer()
 {
     delete m_camera;
+    delete m_sh;
 
     for (Texture *&li : m_loadedImages)
         delete li;

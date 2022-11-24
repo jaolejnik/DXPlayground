@@ -259,6 +259,11 @@ void Model::Render(
         1,
         m_pSceneBuffer.GetAddressOf());
 
+    context->PSSetConstantBuffers(
+        1,
+        1,
+        m_pSceneBuffer.GetAddressOf());
+
     context->UpdateSubresource(
         m_pSceneBuffer.Get(),
         0,

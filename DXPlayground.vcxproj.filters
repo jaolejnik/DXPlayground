@@ -145,6 +145,8 @@
     <FxCompile Include="Shaders\NormalVertexShader.hlsl" />
     <FxCompile Include="Shaders\SkyboxVertexShader.hlsl" />
     <FxCompile Include="Shaders\SkyboxPixelShader.hlsl" />
+    <FxCompile Include="Shaders\SHLightPixelShader.hlsl" />
+    <FxCompile Include="Shaders\SHLightVertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Res\TestCube.arccmdl" />

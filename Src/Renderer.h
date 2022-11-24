@@ -5,6 +5,7 @@
 #include "ShaderManager.h"
 #include "Camera.h"
 #include "Texture.h"
+#include "Sh.h"
 
 class Renderer
 {
@@ -16,10 +17,11 @@ private:
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_pShaderResourceView;
     Microsoft::WRL::ComPtr<ID3D11SamplerState> m_pSamplerState;
     Microsoft::WRL::ComPtr<ID3D11Texture2D> m_pTexture;
-
     TransformBufferStruct m_transformBufferData;
     SceneBufferStruct m_sceneBufferData;
+
     Camera *m_camera;
+    SphericalHarmonics *m_sh;
     std::vector<Model *> m_models;
     unsigned int m_frameCount;
 
@@ -33,6 +35,8 @@ public:
     ~Renderer();
 
     void CreateWindowSizeDependentResources();
+    void SetupModels();
+    void SetupSH();
     void SetupScene();
     void Tick();
     void Render();

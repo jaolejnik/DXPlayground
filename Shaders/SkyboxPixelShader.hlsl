@@ -10,5 +10,4 @@ struct psIn
 float4 main(psIn input) : SV_TARGET
 {
 	return skyboxTexture.Sample(textureSampler, input.texcoord);
-	// return float4(input.texcoord, 1.0f);
 }

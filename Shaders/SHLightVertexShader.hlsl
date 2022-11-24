@@ -1,13 +1,10 @@
+#define COEFF_MAX_COUNT 16 
+
 cbuffer ModelViewProjectionConstantBuffer : register(b0)
 {
     matrix model;
     matrix viewproj;
 };
-
-cbuffer SceneConstantBuffer : register(b1)
-{
-    float3 lightPosition;
-}
 
 struct vsIn
 {
@@ -21,7 +18,6 @@ struct vsOut
     float4 position : SV_POSITION;  
     float4 color    : COLOR;
     float3 normal   : NORMAL;
-    float3 lightDir : POSITION0;
 };
 
 vsOut main(vsIn input) // main is the default function name
@@ -31,7 +27,6 @@ vsOut main(vsIn input) // main is the default function name
     float4 pos = float4(input.position, 1.0f);
     pos = mul(pos, model);
 
-    output.lightDir = normalize(lightPosition - pos); 
     // works only for uniform scale
     output.normal = normalize(mul(float4(input.normal, 0.0f), model).xyz);
     output.position = mul(pos, viewproj);
@@ -39,3 +34,4 @@ vsOut main(vsIn input) // main is the default function name
 
     return output;
 }
+
