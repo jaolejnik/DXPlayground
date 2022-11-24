@@ -4,6 +4,16 @@
 
 #include "../pch.h"
 
+enum class Faces
+{
+    PosX,
+    NegX,
+    PosY,
+    NegY,
+    PosZ,
+    NegZ
+};
+
 class Texture
 {
 private:
@@ -19,4 +29,6 @@ public:
 
     Texture(const char *filePath);
     ~Texture();
+
+    DirectX::XMVECTOR SampleTexture(float u, float v);
 };

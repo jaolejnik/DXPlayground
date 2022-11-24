@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../pch.h"
+#include "Transform.h"
 
 class Camera
 {
@@ -14,6 +15,8 @@ public:
         DirectX::XMFLOAT3 position,
         DirectX::XMFLOAT3 lookAt,
         DirectX::XMFLOAT3 up);
+
+    void Orbit(UINT framecount, float radius, DirectX::XMFLOAT3 lookAt);
 
     const DirectX::XMMATRIX GetViewProjectionMatrix(const float aspectRatioX);
     const DirectX::XMMATRIX GetViewProjectionMatrixInverse(const float aspectRatioX);

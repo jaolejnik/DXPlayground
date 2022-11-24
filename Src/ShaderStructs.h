@@ -38,7 +38,7 @@ static_assert((sizeof(TransformBufferStruct) % 16) == 0, "Transform Constant Buf
 struct SceneBufferStruct
 {
     DirectX::XMFLOAT4 lightPosition;
-    float shCoefficients[16];
+    DirectX::XMFLOAT4 shCoefficients[16];
 };
 
 static_assert((sizeof(SceneBufferStruct) % 16) == 0, "Scene Constant Buffer size must be 16-byte aligned");

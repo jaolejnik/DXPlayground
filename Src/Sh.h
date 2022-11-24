@@ -3,7 +3,7 @@
 #include "../pch.h"
 #include "Texture.h"
 
-typedef float (*polarFn)(const float theta, const float phi);
+typedef DirectX::XMVECTOR (*polarFn)(const float theta, const float phi);
 
 constexpr int SHbands = 4;
 constexpr int SHcoeffCount = SHbands * SHbands;
@@ -21,8 +21,11 @@ class SphericalHarmonics
 {
 private:
     std::vector<SHSample *> m_samples;
-    std::vector<float> m_encodedResults;
+    std::vector<DirectX::XMVECTOR> m_encodedResults;
 
+    DirectX::XMVECTOR SampleCubemap(
+        std::vector<Texture *> &cubemap,
+        DirectX::XMFLOAT3 vec);
     float K(int l, int m);
     float P(int l, int m, float x);
 
@@ -35,8 +38,8 @@ public:
     void ProjectToSH(polarFn fn);
     void ProjectCubemapToSH(std::vector<Texture *> &cubemap);
 
-    const std::vector<float> &GetEncodedCoefficients() { return m_encodedResults; }
+    const std::vector<DirectX::XMVECTOR> &GetEncodedCoefficients() { return m_encodedResults; }
 };
 
 // Test lighting function from Green's paper
-float LightPolar(float theta, float phi);
+DirectX::XMVECTOR LightPolar(float theta, float phi);

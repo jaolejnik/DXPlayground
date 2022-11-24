@@ -39,12 +39,20 @@ const static float factorial[35] = {
 	8683317618811886495518194401280000000.0,
 };
 
+const static float A[5] = {
+	PI,
+	2.094395,
+	0.785398,
+	0.0,
+	0.049087,
+};
+
 // ---- BUFFERS AND STRUCTS ---- 
 cbuffer SceneConstantBuffer : register(b1)
 {
 	float4 lightPosition;
-	float shCoefficients[COEFF_MAX_COUNT];
-}
+	float4 shCoefficients[COEFF_MAX_COUNT];
+};
 
 struct psIn
 {
@@ -113,15 +121,15 @@ float Ylm(int i, float theta, float phi)
 	return evaluateSH(l, m, theta, phi);
 }
 
-float decode(float theta, float phi, float coeffs[COEFF_MAX_COUNT])
+float4 decode(float theta, float phi, float4 coeffs[COEFF_MAX_COUNT])
 {
-	float result = 0.0f;
+	float4 result = 0.0f;
 	for (int i = 0; i < 9; i++)
 	{
 		result += coeffs[i] * Ylm(i, theta, phi);
 	}
 
-	return result;
+	return clamp(result, 0.0, 1.0);
 }
 
 // ---- MAIN ----
@@ -132,11 +140,11 @@ float4 main(psIn input) : SV_TARGET
 	float z = input.normal.z;
 
 	float theta = atan2(y, x);
-	float phi = atan2(sqrt(x*x + y*y), z);
-	float result = decode(theta, phi, shCoefficients);
+	float phi = atan2(sqrt(x * x + y * y), z);
+	float4 result = decode(theta, phi, shCoefficients);
 
-	float3 diffuse = input.color.xyz; 
-	float3 finalcolor = clamp(diffuse * result, 0, 1);
+	float3 diffuse = input.color.xyz;
+	float3 finalcolor = diffuse * result; 
 
 	return float4(finalcolor, 1.0f);
 }

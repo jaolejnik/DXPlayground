@@ -12,12 +12,11 @@ Renderer::Renderer(
     m_shaderManager = shaderManager;
     m_camera = new Camera(
         {0.0f, 0.7f, 1.5f},
-        {0.0f, -0.1f, 0.0f},
+        {0.0f, 0.0f, 0.0f},
         {0.0f, 1.0f, 0.0f});
     m_frameCount = 0;
 }
 
-// Create the view matrix and create the perspective matrix.
 void Renderer::CreateViewAndPerspective()
 {
     float aspectRatioX = m_deviceResources->GetAspectRatio();
@@ -104,8 +103,7 @@ void Renderer::LoadCubeMap(const std::string &dirPath)
 
 void Renderer::CreateWindowSizeDependentResources()
 {
-    CreateViewAndPerspective();
-    LoadCubeMap("Res/Cubemaps/Yokohama/");
+    LoadCubeMap("Res/Cubemaps/Skansen/");
 }
 
 void Renderer::SetupModels()
@@ -117,7 +115,7 @@ void Renderer::SetupModels()
         m_deviceResources);
 
     Transform &tSkybox = skybox->GetTransform();
-    tSkybox.SetScaleUniform(20.0f);
+    tSkybox.SetScaleUniform(50.0f);
 
     Model *cornellBox = new Model(
         "CornellBox",
@@ -168,7 +166,8 @@ void Renderer::SetupModels()
 void Renderer::SetupSH()
 {
     m_sh = new SphericalHarmonics(100, SHbands);
-    m_sh->ProjectToSH(LightPolar);
+    m_sh->ProjectCubemapToSH(m_loadedImages);
+    // m_sh->ProjectToSH(LightPolar);
 }
 
 void Renderer::SetupScene()
@@ -179,7 +178,9 @@ void Renderer::SetupScene()
     auto shCoeffs = m_sh->GetEncodedCoefficients();
     for (int i = 0; i < min(SHcoeffCount, 16); i++)
     {
-        m_sceneBufferData.shCoefficients[i] = shCoeffs[i];
+        DirectX::XMStoreFloat4(
+            m_sceneBufferData.shCoefficients + i,
+            shCoeffs[i]);
     }
 
     DirectX::XMFLOAT3 camPos = m_camera->GetPosition();
@@ -191,6 +192,8 @@ void Renderer::Tick()
 {
     m_frameCount++;
 
+    m_camera->Orbit(m_frameCount, 10.0f, {0.0f, 0.0f, 0.0f});
+
     for (Model *&model : m_models)
         model->Update(m_frameCount);
 
@@ -200,6 +203,8 @@ void Renderer::Tick()
 
 void Renderer::Render()
 {
+    CreateViewAndPerspective();
+
     for (Model *&model : m_models)
     {
         ShaderStruct *shader;
