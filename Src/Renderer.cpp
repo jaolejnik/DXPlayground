@@ -41,10 +41,10 @@ void Renderer::LoadCubeMap(const std::string &dirPath)
         "negz.jpg",
     };
 
-    for (std::string &faceName : faces)
+    for (int i = 0; i < 6; i++)
     {
-        std::string fullPath = dirPath + faceName;
-        m_loadedImages.emplace_back(new Texture(fullPath.c_str()));
+        std::string fullPath = dirPath + faces[i];
+        m_loadedImages.emplace_back(new Texture(fullPath, Faces(i)));
     }
 
     Texture *img = m_loadedImages.front();
@@ -55,7 +55,7 @@ void Renderer::LoadCubeMap(const std::string &dirPath)
     texDesc.Height = img->height;
     texDesc.MipLevels = 1;
     texDesc.ArraySize = 6;
-    texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+    texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     texDesc.CPUAccessFlags = 0;
     texDesc.SampleDesc.Count = 1;
     texDesc.SampleDesc.Quality = 0;
@@ -103,7 +103,7 @@ void Renderer::LoadCubeMap(const std::string &dirPath)
 
 void Renderer::CreateWindowSizeDependentResources()
 {
-    LoadCubeMap("Res/Cubemaps/Skansen/");
+    LoadCubeMap("Res/Cubemaps/Yokohama/");
 }
 
 void Renderer::SetupModels()
@@ -117,32 +117,34 @@ void Renderer::SetupModels()
     Transform &tSkybox = skybox->GetTransform();
     tSkybox.SetScaleUniform(50.0f);
 
-    Model *cornellBox = new Model(
-        "CornellBox",
-        "Res/Models/CornellBox.arccmdl",
+    Model *cube = new Model(
+        "TestCube",
+        "Res/Models/Teapot.arccmdl",
         m_deviceResources);
 
-    Transform &tCornellBox = cornellBox->GetTransform();
-    tCornellBox.SetTranslation({0.0f, 0.0f, -1.75f});
-    tCornellBox.SetRotation(
+    Transform &tCube = cube->GetTransform();
+    tCube.SetTranslation({0.1, -1.4f, 0.0f});
+    tCube.SetRotation(
         {
-            DirectX::XMConvertToRadians(94.0f),
-            DirectX::XMConvertToRadians(63.0f),
-            DirectX::XMConvertToRadians(37.0f),
+            DirectX::XMConvertToRadians(90.0f),
+            DirectX::XMConvertToRadians(170.0f),
+            DirectX::XMConvertToRadians(0.0f),
         });
+    tCube.SetScaleUniform(0.7f);
 
     Model *ball = new Model(
         "Ball",
         "Res/Models/Ball.arccmdl",
         m_deviceResources);
     Transform &tBall = ball->GetTransform();
-    tBall.SetTranslation({0.2, -0.1f, 0.0f});
+    tBall.SetTranslation({-2.25, 0.0f, -3.0f});
     tBall.SetRotation(
         {
             DirectX::XMConvertToRadians(0.0f),
             DirectX::XMConvertToRadians(120.0f),
             DirectX::XMConvertToRadians(20.0f),
         });
+    tBall.SetScaleUniform(4.0f);
 
     Model *monkey = new Model(
         "Monkey",
@@ -153,12 +155,13 @@ void Renderer::SetupModels()
     tMonkey.SetRotation(
         {
             DirectX::XMConvertToRadians(10.0f),
-            DirectX::XMConvertToRadians(-30.0f),
+            DirectX::XMConvertToRadians(120.0f),
             DirectX::XMConvertToRadians(0.0f),
         });
+    tMonkey.SetScaleUniform(1.3f);
 
     m_models.push_back(skybox);
-    m_models.push_back(cornellBox);
+    m_models.push_back(cube);
     m_models.push_back(ball);
     m_models.push_back(monkey);
 }

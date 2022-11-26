@@ -139,8 +139,8 @@ float4 main(psIn input) : SV_TARGET
 	float y = input.normal.y;
 	float z = input.normal.z;
 
-	float theta = atan2(y, x);
-	float phi = atan2(sqrt(x * x + y * y), z);
+	float phi= atan2(y, x);
+	float theta= atan2(sqrt(x * x + y * y), z);
 	float4 result = decode(theta, phi, shCoefficients);
 
 	float3 diffuse = input.color.xyz;

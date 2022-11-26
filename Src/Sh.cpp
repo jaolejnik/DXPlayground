@@ -28,7 +28,6 @@ void SphericalHarmonics::GenerateSamples(int sqrtSampleCount, int bandCount)
 
             float x = (a + random(re)) * oneOverN;
             float y = (b + random(re)) * oneOverN;
-            float test = std::sqrt(1.0f - x);
             float theta = 2.0f * std::acos(std::sqrt(1.0 - x));
             float phi = 2.0f * DirectX::XM_PI * y;
 
@@ -78,8 +77,7 @@ void SphericalHarmonics::ProjectToSH(polarFn fn)
         int i = 0;
         for (const float &coeff : sample->coefficients)
         {
-            m_encodedResults[i] += fn(sample->theta, sample->phi) * coeff;
-            i++;
+            m_encodedResults[i++] += fn(sample->theta, sample->phi) * coeff;
         }
     }
 
@@ -106,7 +104,7 @@ DirectX::XMVECTOR SphericalHarmonics::SampleCubemap(
     float absZ = std::abs(vec.z);
 
     if (absX >= absY &&
-        absX && absZ)
+        absX >= absZ)
     {
         maxAxis = absX;
         v = vec.y;
@@ -162,6 +160,8 @@ DirectX::XMVECTOR SphericalHarmonics::SampleCubemap(
     u = 0.5f * (u / maxAxis + 1.0f);
     v = 0.5f * (v / maxAxis + 1.0f);
 
+    assert(face == cubemap[static_cast<int>(face)]->face);
+
     return cubemap[static_cast<int>(face)]->SampleTexture(u, v);
 }
 
@@ -172,9 +172,7 @@ void SphericalHarmonics::ProjectCubemapToSH(std::vector<Texture *> &cubemap)
         int i = 0;
         for (const float &coeff : sample->coefficients)
         {
-            auto test = SampleCubemap(cubemap, sample->vector);
-            m_encodedResults[i] += SampleCubemap(cubemap, sample->vector) * coeff;
-            i++;
+            m_encodedResults[i++] += SampleCubemap(cubemap, sample->vector) * coeff;
         }
     }
 

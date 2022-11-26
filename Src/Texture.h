@@ -17,9 +17,10 @@ enum class Faces
 class Texture
 {
 private:
-    bool LoadTexture(const char *filePath);
+    bool LoadTexture(const std::string filePath);
 
 public:
+    Faces face;
     int width;
     int height;
     int channels;
@@ -27,7 +28,7 @@ public:
     int pitch;
     unsigned char *data;
 
-    Texture(const char *filePath);
+    Texture(const std::string filePath, Faces inFace);
     ~Texture();
 
     DirectX::XMVECTOR SampleTexture(float u, float v);
