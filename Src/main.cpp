@@ -30,6 +30,14 @@ INT WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
             ShaderType::Skybox,
         };
 
+        std::vector<std::string> cubemaps = {
+            "Yokohama",
+            "Skansen",
+            "Tenerife",
+            "Fort",
+            "debug1",
+        };
+
         // Instantiate the device manager class.
         std::shared_ptr<DeviceResources> deviceResources = std::shared_ptr<DeviceResources>(
             new DeviceResources());
@@ -39,23 +47,22 @@ INT WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
             new ShaderManager(
                 deviceResources,
                 shaders));
+        std::shared_ptr<CubemapManager> cubemapManager = std::shared_ptr<CubemapManager>(
+            new CubemapManager(
+                deviceResources->GetDevice(),
+                cubemaps));
 
         // Instantiate the renderer.
-        std::shared_ptr<Renderer> renderer = std::shared_ptr<Renderer>(
-            new Renderer(
-                deviceResources,
-                shaderManager));
+        std::shared_ptr<Renderer>
+            renderer = std::shared_ptr<Renderer>(
+                new Renderer(
+                    deviceResources,
+                    shaderManager,
+                    cubemapManager));
 
         // We have a window, so initialize window size-dependent resources.
         deviceResources->CreateWindowResources(winMain->GetWindowHandle());
-        renderer->CreateWindowSizeDependentResources();
-
-        // Go full-screen.
-        // deviceResources->GoFullScreen();
-
-        // Whoops! We resized the "window" when we went full-screen. Better
-        // tell the renderer.
-        // renderer->CreateWindowSizeDependentResources();
+        renderer->SetupSH();
 
         // Run the program.
         hr = winMain->Run(deviceResources, renderer);

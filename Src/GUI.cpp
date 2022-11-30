@@ -1,4 +1,9 @@
+#pragma once
+
 #include "GUI.h"
+
+#include "CubemapManager.h"
+#include "ShaderManager.h"
 
 using namespace GUI;
 
@@ -51,13 +56,16 @@ void GUI::Render()
     ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 }
 
-void GUI::MainWindow(float *clearColor, int *currentShader)
+void GUI::MainWindow(float *clearColor, int *currentShader, int *currentCubemap)
 {
     static int counter = 0;
 
     ImGui::Begin("General"); // Create a window called "Hello, world!" and append into it.
 
     ImGui::Combo("Shader", currentShader, ShaderTypeToCstring, IM_ARRAYSIZE(ShaderTypeToCstring), static_cast<int>(ShaderType::COUNT));
+    ImGui::Separator();
+
+    ImGui::Combo("Sybox", currentCubemap, CubemapNamesCString, IM_ARRAYSIZE(CubemapNamesCString), ARRAYSIZE(CubemapNamesCString));
     ImGui::Separator();
 
     ImGui::ColorEdit3("clear color", clearColor); // Edit 3 floats representing a color

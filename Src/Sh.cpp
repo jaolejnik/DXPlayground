@@ -52,8 +52,6 @@ void SphericalHarmonics::GenerateSamples(int sqrtSampleCount, int bandCount)
             m_samples.push_back(sample);
         }
     }
-
-    m_encodedResults.resize(m_samples[0]->coefficients.size());
 }
 
 // return a point sample of a Spherical Harmonic basis function
@@ -71,114 +69,22 @@ float SphericalHarmonics::EvaluateSH(int l, int m, float theta, float phi)
         return sqrt2 * K(l, -m) * std::sin(-m * phi) * P(l, -m, std::cos(theta));
 }
 
-void SphericalHarmonics::ProjectToSH(polarFn fn)
+void SphericalHarmonics::ProjectCubemapToSH(Cubemap *cubemap)
 {
+    auto encodedResults = cubemap->GetEncodedSHData();
+    encodedResults->resize(m_samples[0]->coefficients.size());
+
+    cubemap->m_encodedSHData;
+
     for (SHSample *&sample : m_samples)
     {
         int i = 0;
         for (const float &coeff : sample->coefficients)
-        {
-            m_encodedResults[i++] += fn(sample->theta, sample->phi) * coeff;
-        }
+            (*encodedResults)[i++] += cubemap->SampleCubemap(sample->vector) * coeff;
     }
 
     float factor = SHweight / static_cast<float>(m_samples.size());
-    for (auto &result : m_encodedResults)
-        result *= factor;
-}
-
-DirectX::XMVECTOR SphericalHarmonics::SampleCubemap(
-    std::vector<Texture *> &cubemap,
-    DirectX::XMFLOAT3 vec)
-{
-    Faces face;
-    float u;
-    float v;
-    float maxAxis;
-
-    bool isXPositive = vec.x > 0;
-    bool isYPositive = vec.y > 0;
-    bool isZPositive = vec.z > 0;
-
-    float absX = std::abs(vec.x);
-    float absY = std::abs(vec.y);
-    float absZ = std::abs(vec.z);
-
-    if (absX >= absY &&
-        absX >= absZ)
-    {
-        maxAxis = absX;
-        v = vec.y;
-
-        if (isXPositive)
-        {
-            u = -vec.z;
-            face = Faces::PosX;
-        }
-        else
-        {
-            u = vec.z;
-            face = Faces::NegX;
-        }
-    }
-
-    if (absY >= absX &&
-        absY >= absZ)
-    {
-        maxAxis = absY;
-        u = vec.x;
-
-        if (isYPositive)
-        {
-            v = -vec.z;
-            face = Faces::PosY;
-        }
-        else
-        {
-            v = vec.z;
-            face = Faces::NegY;
-        }
-    }
-
-    if (absZ >= absX &&
-        absZ >= absY)
-    {
-        maxAxis = absZ;
-        v = vec.y;
-
-        if (isZPositive)
-        {
-            u = vec.x;
-            face = Faces::PosZ;
-        }
-        else
-        {
-            u = -vec.x;
-            face = Faces::NegZ;
-        }
-    }
-
-    u = 0.5f * (u / maxAxis + 1.0f);
-    v = 0.5f * (v / maxAxis + 1.0f);
-
-    assert(face == cubemap[static_cast<int>(face)]->face);
-
-    return cubemap[static_cast<int>(face)]->SampleTexture(u, v);
-}
-
-void SphericalHarmonics::ProjectCubemapToSH(std::vector<Texture *> &cubemap)
-{
-    for (SHSample *&sample : m_samples)
-    {
-        int i = 0;
-        for (const float &coeff : sample->coefficients)
-        {
-            m_encodedResults[i++] += SampleCubemap(cubemap, sample->vector) * coeff;
-        }
-    }
-
-    float factor = SHweight / static_cast<float>(m_samples.size());
-    for (auto &result : m_encodedResults)
+    for (auto &result : (*encodedResults))
         result *= factor;
 }
 

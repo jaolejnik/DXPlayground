@@ -2,21 +2,19 @@
 
 #include "DeviceResources.h"
 #include "Model.h"
-#include "ShaderManager.h"
 #include "Camera.h"
-#include "Texture.h"
 #include "Sh.h"
+#include "ShaderManager.h"
+#include "CubemapManager.h"
 
 class Renderer
 {
 private:
     std::shared_ptr<DeviceResources> m_deviceResources;
     std::shared_ptr<ShaderManager> m_shaderManager;
+    std::shared_ptr<CubemapManager> m_pCubemapManager;
 
-    std::vector<Texture *> m_loadedImages;
-    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> m_pShaderResourceView;
     Microsoft::WRL::ComPtr<ID3D11SamplerState> m_pSamplerState;
-    Microsoft::WRL::ComPtr<ID3D11Texture2D> m_pTexture;
     TransformBufferStruct m_transformBufferData;
     SceneBufferStruct m_sceneBufferData;
 
@@ -26,15 +24,14 @@ private:
     unsigned int m_frameCount;
 
     void CreateViewAndPerspective();
-    void LoadCubeMap(const std::string &dirPath);
 
 public:
     Renderer(
         std::shared_ptr<DeviceResources> deviceResources,
-        std::shared_ptr<ShaderManager> shaderManager);
+        std::shared_ptr<ShaderManager> shaderManager,
+        std::shared_ptr<CubemapManager> cubemapManager);
     ~Renderer();
 
-    void CreateWindowSizeDependentResources();
     void SetupModels();
     void SetupSH();
     void SetupScene();
@@ -42,6 +39,7 @@ public:
     void Render();
 
     void SetCurrentShader(int i) { m_shaderManager->SetCurrentShader(i); }
+    void SetCurrentCubemap(int i) { m_pCubemapManager->SetCurrentCubemap(i); }
 
     std::vector<Model *> &GetModels() { return m_models; }
 };

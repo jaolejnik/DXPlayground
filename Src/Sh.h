@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../pch.h"
-#include "Texture.h"
+#include "Cubemap.h"
 
 typedef DirectX::XMVECTOR (*polarFn)(const float theta, const float phi);
 
@@ -21,10 +21,9 @@ class SphericalHarmonics
 {
 private:
     std::vector<SHSample *> m_samples;
-    std::vector<DirectX::XMVECTOR> m_encodedResults;
 
     DirectX::XMVECTOR SampleCubemap(
-        std::vector<Texture *> &cubemap,
+        Cubemap *cubemap,
         DirectX::XMFLOAT3 vec);
     float K(int l, int m);
     float P(int l, int m, float x);
@@ -36,9 +35,7 @@ public:
     void GenerateSamples(int sqrtSampleCount, int bandCount);
     float EvaluateSH(int l, int m, float theta, float phi);
     void ProjectToSH(polarFn fn);
-    void ProjectCubemapToSH(std::vector<Texture *> &cubemap);
-
-    const std::vector<DirectX::XMVECTOR> &GetEncodedCoefficients() { return m_encodedResults; }
+    void ProjectCubemapToSH(Cubemap *cubemap);
 };
 
 // Test lighting function from Green's paper

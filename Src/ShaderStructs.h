@@ -3,7 +3,7 @@
 #include "../pch.h"
 #include "Sh.h"
 
-constexpr const char *ShaderTypeToCstring[] =
+constexpr char *ShaderTypeToCstring[] =
     {
         "SHLight",
         "Diffuse",

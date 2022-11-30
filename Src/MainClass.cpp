@@ -94,6 +94,7 @@ HRESULT MainClass::Run(std::shared_ptr<DeviceResources> deviceResources,
 
     float clearColor[4] = {0.0f, 0.0f, 0.f, 1.0f};
     int currentShader = 0;
+    int currentCubemap = 0;
 
     while (WM_QUIT != msg.message)
     {
@@ -110,9 +111,10 @@ HRESULT MainClass::Run(std::shared_ptr<DeviceResources> deviceResources,
         else
         {
             GUI::StartFrame();
-            GUI::MainWindow(clearColor, &currentShader);
+            GUI::MainWindow(clearColor, &currentShader, &currentCubemap);
 
             renderer->SetCurrentShader(currentShader);
+            renderer->SetCurrentCubemap(currentCubemap);
 
             for (Model *&model : renderer->GetModels())
                 GUI::ModelWindow(model);
