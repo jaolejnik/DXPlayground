@@ -103,7 +103,7 @@ void Renderer::LoadCubeMap(const std::string &dirPath)
 
 void Renderer::CreateWindowSizeDependentResources()
 {
-    LoadCubeMap("Res/Cubemaps/Yokohama/");
+    LoadCubeMap("Res/Cubemaps/debug1/");
 }
 
 void Renderer::SetupModels()
@@ -117,20 +117,20 @@ void Renderer::SetupModels()
     Transform &tSkybox = skybox->GetTransform();
     tSkybox.SetScaleUniform(50.0f);
 
-    Model *cube = new Model(
-        "TestCube",
+    Model *teapot = new Model(
+        "Teapot",
         "Res/Models/Teapot.arccmdl",
         m_deviceResources);
 
-    Transform &tCube = cube->GetTransform();
-    tCube.SetTranslation({0.1, -1.4f, 0.0f});
-    tCube.SetRotation(
+    Transform &tTeapot = teapot->GetTransform();
+    tTeapot.SetTranslation({0.1, -1.4f, 0.0f});
+    tTeapot.SetRotation(
         {
             DirectX::XMConvertToRadians(90.0f),
             DirectX::XMConvertToRadians(170.0f),
             DirectX::XMConvertToRadians(0.0f),
         });
-    tCube.SetScaleUniform(0.7f);
+    tTeapot.SetScaleUniform(0.7f);
 
     Model *ball = new Model(
         "Ball",
@@ -161,7 +161,7 @@ void Renderer::SetupModels()
     tMonkey.SetScaleUniform(1.3f);
 
     m_models.push_back(skybox);
-    m_models.push_back(cube);
+    m_models.push_back(teapot);
     m_models.push_back(ball);
     m_models.push_back(monkey);
 }

@@ -13,7 +13,6 @@ SphericalHarmonics::SphericalHarmonics(int sqrtSampleCount, int bandCount)
 
 void SphericalHarmonics::GenerateSamples(int sqrtSampleCount, int bandCount)
 {
-    int i = 0;
     float oneOverN = 1.0f / sqrtSampleCount;
 
     std::random_device rd;
@@ -33,9 +32,12 @@ void SphericalHarmonics::GenerateSamples(int sqrtSampleCount, int bandCount)
 
             sample->theta = theta;
             sample->phi = phi;
+
+            // BUG need to negate x and y for some reason otherwise X and Y
+            // faces are inverted when decoding...
             sample->vector = {
-                std::sin(theta) * std::cos(phi),
-                std::sin(theta) * std::sin(phi),
+                -std::sin(theta) * std::cos(phi),
+                -std::sin(theta) * std::sin(phi),
                 std::cos(theta),
             };
 
@@ -43,7 +45,6 @@ void SphericalHarmonics::GenerateSamples(int sqrtSampleCount, int bandCount)
             {
                 for (int m = -l; m <= l; m++)
                 {
-                    int index = l * (l + 1) + m;
                     sample->coefficients.push_back(EvaluateSH(l, m, theta, phi));
                 }
             }
