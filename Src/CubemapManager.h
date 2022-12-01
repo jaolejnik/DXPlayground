@@ -3,10 +3,10 @@
 #include "Cubemap.h"
 
 constexpr char *CubemapNamesCString[]{
-    "Yokohama",
-    "Skansen",
     "Tenerife",
     "Fort",
+    "Yokohama",
+    "Skansen",
     "debug1",
 };
 

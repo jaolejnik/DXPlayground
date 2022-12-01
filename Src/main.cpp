@@ -24,17 +24,18 @@ INT WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
     if (SUCCEEDED(hr))
     {
         std::vector<ShaderType> shaders = {
+            ShaderType::Default,
             ShaderType::SHLight,
-            ShaderType::Diffuse,
             ShaderType::Normal,
+            ShaderType::Diffuse,
             ShaderType::Skybox,
         };
 
         std::vector<std::string> cubemaps = {
-            "Yokohama",
-            "Skansen",
             "Tenerife",
             "Fort",
+            "Yokohama",
+            "Skansen",
             "debug1",
         };
 

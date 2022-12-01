@@ -5,17 +5,19 @@
 
 constexpr char *ShaderTypeToCstring[] =
     {
+        "Default",
         "SHLight",
-        "Diffuse",
         "Normal",
+        "Diffuse",
         "Skybox",
 };
 
 enum class ShaderType
 {
+    Default,
     SHLight,
-    Diffuse,
     Normal,
+    Diffuse,
     Skybox,
     COUNT,
 };

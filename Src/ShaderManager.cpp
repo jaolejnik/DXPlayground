@@ -14,6 +14,7 @@ void ShaderManager::CreateInputLayout(const ShaderType &shaderType, std::vector<
 {
     switch (shaderType)
     {
+    case ShaderType::Default:
     case ShaderType::Diffuse:
     case ShaderType::SHLight:
     case ShaderType::Normal:
