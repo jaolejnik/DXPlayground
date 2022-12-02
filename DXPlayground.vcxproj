@@ -196,6 +196,14 @@
   <ItemGroup>
     <None Include="Res\TestCube.arccmdl" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\Downloads\nx.png" />
+    <Image Include="..\..\..\..\Downloads\ny.png" />
+    <Image Include="..\..\..\..\Downloads\nz.png" />
+    <Image Include="..\..\..\..\Downloads\px.png" />
+    <Image Include="..\..\..\..\Downloads\py.png" />
+    <Image Include="..\..\..\..\Downloads\pz.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

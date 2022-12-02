@@ -7,6 +7,7 @@ constexpr char *CubemapNamesCString[]{
     "Fort",
     "Yokohama",
     "Skansen",
+    "VRLab",
     "debug1",
 };
 

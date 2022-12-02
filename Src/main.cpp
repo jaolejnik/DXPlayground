@@ -36,6 +36,7 @@ INT WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
             "Fort",
             "Yokohama",
             "Skansen",
+            "VRLab",
             "debug1",
         };
 
